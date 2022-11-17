@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/mainFragment">
+
+    <fragment
+        android:id="@+id/currentFragment"
+        android:name="com.citrus.citrusac.present.current.CurrentFragment"
+        android:label="CurrentFragment" >
+        <action
+            android:id="@+id/action_currentFragment_to_orangeDialogFragment"
+            app:destination="@id/orangeDialogFragment" />
+    </fragment>
+
+    <dialog
+        android:id="@+id/orangeDialogFragment"
+        android:name="com.citrus.citrusac.present.history.OrangeDialogFragment"
+        android:label="OrangeDialogFragment" />
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="com.citrus.citrusac.present.main.MainFragment"
+        android:label="MainFragment" />
+</navigation>

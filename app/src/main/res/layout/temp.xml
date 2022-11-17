@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/dp_3"
+    android:background="#ddd">
+
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/avatar"
+        android:layout_width="@dimen/dp_100"
+        android:layout_height="@dimen/dp_100"
+        android:background="@color/white"
+        android:elevation="@dimen/dp_16"
+        android:padding="@dimen/dp_5"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toTopOf="@+id/llInfo"
+        app:layout_constraintEnd_toEndOf="@+id/llInfo"
+        app:layout_constraintStart_toStartOf="@+id/llInfo"
+        app:layout_constraintTop_toTopOf="@+id/llInfo"
+        app:shapeAppearanceOverlay="@style/roundedCorner"
+        app:strokeColor="@color/white"
+        app:strokeWidth="@dimen/dp_3"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <ImageView
+        android:layout_width="@dimen/dp_50"
+        android:layout_height="@dimen/dp_50"
+        android:layout_gravity="end"
+        android:layout_margin="@dimen/dp_60"
+        android:elevation="@dimen/dp_18"
+        android:src="@drawable/note_page"
+        app:layout_constraintStart_toStartOf="@+id/avatar"
+        app:layout_constraintTop_toTopOf="@+id/avatar" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/avatarBarrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="avatar" />
+
+
+    <soup.neumorphism.NeumorphCardView
+        android:id="@+id/llInfo"
+        style="@style/Widget.Neumorph.CardView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginHorizontal="@dimen/dp_5"
+        android:padding="@dimen/dp_6"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="1:0.80"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:neumorph_backgroundColor="@color/colorPrimary"
+        app:neumorph_inset="@dimen/dp_10"
+        app:neumorph_lightSource="leftTop"
+        app:neumorph_shadowColorDark="@color/colorPrimaryDark"
+        app:neumorph_shadowColorLight="@color/colorPrimaryLight"
+        app:neumorph_shadowElevation="@dimen/dp_6"
+        app:neumorph_shapeAppearance="@style/CustomShapeAppearance"
+        app:neumorph_shapeType="flat">
+
+    </soup.neumorphism.NeumorphCardView>
+
+    <TextView
+        android:id="@+id/userName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="吳宗徽"
+        android:textColor="@color/white"
+        android:textSize="@dimen/dp_24"
+        app:layout_constraintBottom_toTopOf="@+id/userPid"
+        app:layout_constraintEnd_toEndOf="@+id/llInfo"
+        app:layout_constraintStart_toStartOf="@+id/llInfo"
+        app:layout_constraintTop_toBottomOf="@+id/avatarBarrier"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <TextView
+        android:id="@+id/userPid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_5"
+        android:drawableStart="@drawable/id"
+        android:drawablePadding="@dimen/dp_3"
+        android:drawableTint="@color/white"
+        android:gravity="center"
+        android:text="26174802"
+        android:textColor="#E4E4E4"
+        android:textSize="@dimen/dp_16"
+        app:layout_constraintBottom_toTopOf="@+id/enterTime"
+        app:layout_constraintEnd_toEndOf="@+id/llInfo"
+        app:layout_constraintStart_toStartOf="@+id/llInfo"
+        app:layout_constraintTop_toBottomOf="@+id/userName" />
+
+    <TextView
+        android:id="@+id/enterTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_12"
+        android:background="@drawable/bg_round"
+        android:gravity="center"
+        android:padding="@dimen/dp_12"
+        android:text="入場時間 14:06"
+        android:textColor="@color/white"
+        android:textSize="@dimen/dp_20"
+        app:layout_constraintBottom_toBottomOf="@+id/llInfo"
+        app:layout_constraintEnd_toEndOf="@+id/llInfo"
+        app:layout_constraintStart_toStartOf="@+id/llInfo"
+        app:layout_constraintTop_toBottomOf="@+id/userPid" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorPrimary">
+
+
+    <soup.neumorphism.NeumorphCardView
+        android:id="@+id/llInfo"
+        style="@style/Widget.Neumorph.CardView"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_100"
+        android:layout_marginHorizontal="@dimen/dp_5"
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_marginBottom="@dimen/dp_5"
+        android:padding="@dimen/dp_6"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:neumorph_backgroundColor="@color/colorPrimary"
+        app:neumorph_inset="@dimen/dp_10"
+        app:neumorph_lightSource="leftTop"
+        app:neumorph_shadowColorDark="@color/colorPrimaryDark"
+        app:neumorph_shadowColorLight="@color/colorPrimaryLight"
+        app:neumorph_shadowElevation="@dimen/dp_6"
+        app:neumorph_shapeAppearance="@style/CustomShapeAppearance3"
+        app:neumorph_shapeType="flat">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/ivStatus"
+                android:layout_width="@dimen/dp_30"
+                android:layout_height="@dimen/dp_30"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:padding="@dimen/dp_5"
+                android:src="@drawable/ic_baseline_circle_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/per15"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/red" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/per15"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.15" />
+
+
+            <TextView
+                android:id="@+id/tvCustNo"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:padding="@dimen/dp_10"
+                android:textColor="@color/white"
+                android:textSize="@dimen/dp_20"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/per35"
+                app:layout_constraintStart_toEndOf="@+id/per15"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="1700009" />
+
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/per35"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.35" />
+
+
+            <TextView
+                android:id="@+id/tvName"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:gravity="center"
+                android:padding="@dimen/dp_10"
+                android:textColor="@color/white"
+                android:minLines="2"
+                android:maxLines="2"
+                android:textSize="@dimen/dp_20"
+                app:layout_constraintStart_toEndOf="@+id/per35"
+                app:layout_constraintEnd_toStartOf="@+id/per60"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                tools:text="Kenny-Hsieh-Chung" />
+
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/per60"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.6" />
+
+
+                        <TextView
+                            android:id="@+id/tvLogTime"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="4"
+                            android:gravity="center"
+                            android:padding="@dimen/dp_10"
+                            tools:text="2022/03/05 17:00:21"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/dp_20"
+                            app:layout_constraintStart_toEndOf="@+id/per60"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!--        <LinearLayout-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:orientation="horizontal"-->
+        <!--            android:weightSum="10"-->
+        <!--            android:padding="@dimen/dp_5">-->
+
+        <!--            <ImageView-->
+        <!--                android:id="@+id/ivStatus"-->
+        <!--                android:layout_width="@dimen/dp_24"-->
+        <!--                android:layout_height="@dimen/dp_24"-->
+        <!--                android:layout_weight="1"-->
+        <!--                android:gravity="center"-->
+        <!--                android:layout_gravity="center"-->
+        <!--                android:padding="@dimen/dp_5"-->
+        <!--                android:src="@drawable/ic_baseline_circle_24"-->
+        <!--                app:tint="@color/red"-->
+        <!--                />-->
+
+        <!--            <TextView-->
+        <!--                android:id="@+id/tvCustNo"-->
+        <!--                android:layout_width="wrap_content"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:layout_weight="2"-->
+        <!--                android:padding="@dimen/dp_10"-->
+        <!--                android:gravity="center"-->
+        <!--                tools:text="1700009"-->
+        <!--                android:textColor="@color/white"-->
+        <!--                />-->
+
+        <!--            <TextView-->
+        <!--                android:id="@+id/tvName"-->
+        <!--                android:layout_width="wrap_content"-->
+        <!--                android:layout_height="match_parent"-->
+        <!--                android:layout_weight="3"-->
+        <!--                android:padding="@dimen/dp_10"-->
+        <!--                tools:text="Kenny"-->
+        <!--                android:gravity="center"-->
+        <!--                android:textColor="@color/white"-->
+        <!--                />-->
+
+        <!--            <TextView-->
+        <!--                android:id="@+id/tvLogTime"-->
+        <!--                android:layout_width="wrap_content"-->
+        <!--                android:layout_height="match_parent"-->
+        <!--                android:layout_weight="4"-->
+        <!--                android:gravity="center"-->
+        <!--                android:padding="@dimen/dp_10"-->
+        <!--                tools:text="2022/03/05 17:00:21"-->
+        <!--                android:textColor="@color/white"-->
+        <!--                />-->
+
+        <!--        </LinearLayout>-->
+
+    </soup.neumorphism.NeumorphCardView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
