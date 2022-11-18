@@ -8,6 +8,8 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.viewbinding.ViewBinding
+import com.citrus.citrusac.R
+import com.citrus.util.base.CustomAlertDialog
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
@@ -34,3 +36,21 @@ inline fun <T : ViewBinding> DialogFragment.viewBinding(crossinline factory: (La
     lazy(LazyThreadSafetyMode.NONE) {
         factory(layoutInflater)
     }
+
+
+fun Fragment.showErrDialog(
+    title: String,
+    msg: String,
+    onConfirmListener: () -> Unit,
+    onCancelListener: (() -> Unit)? = null
+) {
+    activity?.let {
+        val customDialog = CustomAlertDialog(
+            it, title, msg,
+            R.drawable.ic_warning,
+            onConfirmListener = { onConfirmListener() },
+            onCancelListener = { onCancelListener?.invoke() }
+        )
+        customDialog.show()
+    }
+}

@@ -62,7 +62,10 @@ class HistoryFragment : BaseFragment(R.layout.fragment_history) {
                     tvDate.text =
                         selectedDates.first().toDateStr() + " ~ " + selectedDates.last().toDateStr()
                     val dates =
-                        listOf(selectedDates.first().toDateStr2(), selectedDates.last().toDateStr2())
+                        listOf(
+                            selectedDates.first().toDateStr2(),
+                            selectedDates.last().toDateStr2()
+                        )
                     viewModel.accept(UiAction.SearchDate(dates = dates))
                 }.show(childFragmentManager, "CustomDatePickerDialog")
 
@@ -78,6 +81,7 @@ class HistoryFragment : BaseFragment(R.layout.fragment_history) {
                 tvDate.hint = "不限時段"
 
                 val dates =
+
                     listOf("", "")
                 viewModel.accept(UiAction.SearchDate(dates = dates))
             }
@@ -120,7 +124,7 @@ class HistoryFragment : BaseFragment(R.layout.fragment_history) {
                     historyAcAdapter.updateDataset(it.data as MutableList<AccessHistory>)
                 }
                 is Resource.Loading -> {
-
+                    binding.loadingBar.isVisible = it.isLoading
                 }
                 is Resource.Error -> {
                     viewModel.setDataEmpty()
@@ -177,17 +181,17 @@ class HistoryFragment : BaseFragment(R.layout.fragment_history) {
                 binding.llMemoChip.isVisible = false
             }
 
-            if(info.resData.isNotEmpty()) {
+            if (info.resData.isNotEmpty()) {
                 llResInfo.visibility = View.VISIBLE
                 resTime.text = Constants.getResServerTime(info.resData[0].resTime)
                 resNum.text = info.resData[0].custNum.toString() + "人"
-                if(info.resData[0].memo.isNotBlank()) {
+                if (info.resData[0].memo.isNotBlank()) {
                     resMemo.text = info.resData[0].memo
                     resMemo.visibility = View.VISIBLE
                 } else {
                     resMemo.visibility = View.GONE
                 }
-            }else {
+            } else {
                 llResInfo.visibility = View.GONE
             }
 

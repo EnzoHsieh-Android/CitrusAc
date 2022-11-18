@@ -110,8 +110,8 @@ dependencies {
     implementation 'com.daimajia.easing:library:2.0@aar'
     implementation 'com.daimajia.androidanimations:library:2.3@aar'
 
-    implementation "com.squareup.moshi:moshi-kotlin:1.9.2"
-    kapt 'com.squareup.moshi:moshi-kotlin-codegen:1.9.2'
+    implementation "com.squareup.moshi:moshi-kotlin:1.14.0"
+    kapt 'com.squareup.moshi:moshi-kotlin-codegen:1.14.0'
 
     implementation 'com.google.android.gms:play-services-vision:20.1.3'
 

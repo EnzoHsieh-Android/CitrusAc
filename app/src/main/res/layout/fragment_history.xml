@@ -599,13 +599,24 @@
         android:layout_width="@dimen/dp_100"
         android:layout_height="@dimen/dp_100"
         android:scaleType="centerCrop"
-        android:src="@drawable/ic_search"
+        android:src="@drawable/no_task"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/startVertical"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/llTitle"
         app:tint="@color/colorGoldDeep"
         tools:visibility="gone" />
+
+    <ProgressBar
+        android:visibility="invisible"
+        android:id="@+id/loadingBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/startVertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/llTitle"
+        tools:visibility="visible" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

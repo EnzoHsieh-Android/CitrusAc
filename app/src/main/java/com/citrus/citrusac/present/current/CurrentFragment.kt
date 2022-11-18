@@ -2,7 +2,6 @@ package com.citrus.citrusac.present.current
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
-import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.core.view.isVisible
@@ -10,7 +9,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.VideoDecoder.asset
 import com.citrus.citrusac.R
 import com.citrus.citrusac.databinding.FragmentCurrentBinding
 import com.citrus.citrusac.present.current.adapter.CurrentAcAdapter
@@ -24,12 +22,10 @@ import com.citrus.util.Constants.getResServerTime
 import com.citrus.util.Constants.setChips
 import com.citrus.util.base.BaseFragment
 import com.citrus.util.ext.lifecycleFlow
+import com.citrus.util.ext.showErrDialog
 import com.citrus.util.ext.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import splitties.views.onClick
+import kotlinx.coroutines.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -37,6 +33,7 @@ class CurrentFragment : BaseFragment(R.layout.fragment_current) {
     private val binding by viewBinding(FragmentCurrentBinding::bind)
     private val viewModel: CurrentViewModel by viewModels()
     private val sharedViewModel: SharedViewModel by activityViewModels()
+    var scope = CoroutineScope(Job() + Dispatchers.Main)
 
     @Inject
     lateinit var currentAcAdapter: CurrentAcAdapter
@@ -49,29 +46,21 @@ class CurrentFragment : BaseFragment(R.layout.fragment_current) {
 
     override fun onResume() {
         super.onResume()
+        viewModel.startFetchJob()
         sharedViewModel.setViewPagerSwitch(PageType.Current)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        viewModel.init()
-    }
 
     override fun initView() {
         binding.apply {
             binding.resultSuccess.addAnimatorListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator?) {
                     super.onAnimationEnd(animation)
-                    MainScope().launch {
+                    scope.launch {
                         binding.successAnimation.visibility = View.GONE
                     }
                 }
             })
-
-            llInfo.onClick {
-
-
-            }
 
             rvCurrent.apply {
                 layoutManager = GridLayoutManager(requireContext(), 2)
@@ -87,27 +76,38 @@ class CurrentFragment : BaseFragment(R.layout.fragment_current) {
             }
         }
 
+        lifecycleFlow(viewModel.acSerialError) {
+            viewModel.stopFetchJob()
+            showErrDialog(
+                title = "與系統連線發生問題",
+                msg = it,
+                onConfirmListener = {
+                    viewModel.startFetchJob()
+                }
+            )
+        }
+
         lifecycleFlow(sharedViewModel.setAcDataSuccess) {
             when (it) {
                 Constants.SUCCESS -> {
-                    binding.resultSuccess.setAnimation("success.json")
+                    binding.resultSuccess.setAnimation("success_result.json")
                     binding.successAnimation.visibility = View.VISIBLE
                     binding.resultSuccess.playAnimation()
+                    binding.resultHint.text = "補登成功！"
                 }
 
                 Constants.ERROR -> {
-                    binding.resultSuccess.setAnimation("fail.json")
+                    binding.resultSuccess.setAnimation("error2.json")
                     binding.successAnimation.visibility = View.VISIBLE
                     binding.resultSuccess.playAnimation()
+                    binding.resultHint.text = "查無會員資料"
                 }
             }
         }
 
         lifecycleFlow(viewModel.acLatest) {
             when (it) {
-                is Resource.Loading -> {
-
-                }
+                is Resource.Loading -> Unit
 
                 is Resource.Success -> {
                     binding.rvCurrent.isVisible = true
@@ -181,6 +181,17 @@ class CurrentFragment : BaseFragment(R.layout.fragment_current) {
 
             llDetailInfo.isVisible = true
         }
+    }
+
+
+    override fun onDestroyView() {
+        scope.cancel()
+        super.onDestroyView()
+    }
+
+    override fun onPause() {
+        viewModel.stopFetchJob()
+        super.onPause()
     }
 
 

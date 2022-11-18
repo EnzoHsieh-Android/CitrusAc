@@ -22,9 +22,10 @@ data class AccessLatest(
     val notes: List<NoteData>,
     @Json(name = "Reservation")
     val resData: List<Reservation>,
-    @Transient
+    @Json(ignore = true)
     var selected: Boolean = false,
 )
+
 
 data class NoteData(
     @Json(name = "Seq")
@@ -47,4 +48,4 @@ data class Reservation(
     val empName: String?,
     @Json(name = "Phone")
     val phone: String
-    )
+)

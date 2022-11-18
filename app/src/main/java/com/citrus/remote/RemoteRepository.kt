@@ -45,7 +45,7 @@ class RemoteRepository @Inject constructor(private val apiService: ApiService) :
             }.suspendOnException {
                 emit(Resource.Error(this.message!!))
             }
-        }
+        }.flowOn(Dispatchers.IO)
 
     override suspend fun getAcHistory(
         url: String,
@@ -62,7 +62,7 @@ class RemoteRepository @Inject constructor(private val apiService: ApiService) :
         }.suspendOnException {
             emit(Resource.Error(this.message!!))
         }
-    }
+    }.onStart { emit(Resource.Loading(true)) }.onCompletion { emit(Resource.Loading(false)) }.flowOn(Dispatchers.IO)
 
     override suspend fun setAcData(
         url: String,
@@ -79,7 +79,7 @@ class RemoteRepository @Inject constructor(private val apiService: ApiService) :
         }.suspendOnException {
             emit(Resource.Error(this.message!!))
         }
-    }
+    }.flowOn(Dispatchers.IO)
 
     override suspend fun getAcLatest(url: String): Flow<Resource<List<AccessLatest>>> = flow {
         apiService.getAcLatest(url).suspendOnSuccess {
@@ -93,7 +93,7 @@ class RemoteRepository @Inject constructor(private val apiService: ApiService) :
         }.suspendOnException {
             emit(Resource.Error(this.message!!))
         }
-    }
+    }.flowOn(Dispatchers.IO)
 
     override suspend fun getAcDetail(url: String, jsonData: String): Flow<Resource<AccessLatest>> =
         flow {
@@ -108,7 +108,5 @@ class RemoteRepository @Inject constructor(private val apiService: ApiService) :
             }.suspendOnException {
                 emit(Resource.Error(this.message!!))
             }
-
-
-        }
+        }.flowOn(Dispatchers.IO)
 }

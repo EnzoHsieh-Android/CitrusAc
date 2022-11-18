@@ -1,21 +1,10 @@
 package com.citrus.citrusac.present.history
 
 import android.annotation.SuppressLint
-import android.os.Bundle
-import android.view.Gravity
-import android.view.LayoutInflater
 import android.view.View
-import android.view.WindowManager
-import androidx.fragment.app.DialogFragment
-import androidx.viewbinding.ViewBinding
-import com.citrus.citrusac.R
 import com.citrus.citrusac.databinding.DailogDatePickerBinding
-import com.citrus.citrusac.databinding.FragmentOrangeDialogBinding
-import com.citrus.util.Constants
 import com.citrus.util.base.BaseDialogFragment
-import com.citrus.util.base.BindingDialogFragment
 import com.citrus.util.ext.toLocalTime
-import com.citrus.util.ext.viewBinding
 import com.daimajia.androidanimations.library.Techniques
 import com.daimajia.androidanimations.library.YoYo
 import splitties.snackbar.snack
