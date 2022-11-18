@@ -7,18 +7,13 @@ import retrofit2.http.*
 
 
 interface ApiService {
-
-    @GET("get_memes")
-    suspend fun setQrEnable(): ApiResponse<String>
-
-    @GET
-    suspend fun setOrdersPeriodByStatus(
-        @Url url: String,
-        @Query("jsonData") jsonStr: String
-    ): ApiResponse<ResponseEnableQR>
-
     @GET
     suspend fun getAcSerial(
+        @Url url: String
+    ): ApiResponse<CustomSerialResult>
+
+    @GET
+    suspend fun getAcSerial2(
         @Url url: String
     ): ApiResponse<CustomSerialResult>
 

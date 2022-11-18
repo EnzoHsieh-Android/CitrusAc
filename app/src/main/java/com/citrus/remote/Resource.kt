@@ -51,7 +51,7 @@ class RetryCondition(val errorMsg: String) : Exception()
 /**noInline：函數類型的參數在inline時會無法被當成對象來使用，需用noinline局部關閉inline效果*/
 fun <T, DATA> resultFlowData(
     apiAction: suspend () -> ApiResponse<T>,
-    onSuccess: (ApiResponse.Success<T>) -> Resource<List<DATA>>
+    onSuccess: (ApiResponse.Success<T>) -> Resource<DATA>
 ) = flow {
     apiAction().suspendOnSuccess {
         emit(onSuccess(this))
