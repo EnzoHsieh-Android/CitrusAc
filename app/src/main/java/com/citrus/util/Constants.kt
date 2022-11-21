@@ -29,6 +29,7 @@ object Constants {
     const val GET_RECORD_HISTORY = "/CitrusAC/Service.asmx/GetRecordHistoryList"
     const val GET_RECORD_LATEST = "/CitrusAC/Service.asmx/GetRecordLatestList"
     const val SET_ACCESS_DATA = "/AC/Service.asmx/SetCustAccessData"
+    const val DOWNLOAD_URL = "http://hq.citrus.tw/apk/"
     val serverDateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
 
 

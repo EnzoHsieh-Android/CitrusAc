@@ -11,10 +11,16 @@ import com.citrus.util.Constants.ERROR
 import com.citrus.util.Constants.SUCCESS
 import com.citrus.util.Constants.getServerIP
 import com.citrus.util.MoshiUtil
+import com.citrus.util.apkDownload.DownloadStatus
+import com.citrus.util.apkDownload.downloadFile
 import com.citrus.util.ext.fineEmit
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.ktor.client.*
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import java.io.File
 import javax.inject.Inject
 
 
@@ -34,6 +40,11 @@ class SharedViewModel @Inject constructor(private val remoteRepository: RemoteRe
     private val _setPageType = MutableSharedFlow<PageType>()
     val setPageType: SharedFlow<PageType> = _setPageType
 
+    /**更版用*/
+    private var updateJob: Job? = null
+    private val _downloadStatus = MutableSharedFlow<DownloadStatus>()
+    val downloadStatus: SharedFlow<DownloadStatus>
+        get() = _downloadStatus
 
 
     fun setAcData(custNo: String, status: String = "I", memo: String = "") = viewModelScope.launch {
@@ -62,6 +73,25 @@ class SharedViewModel @Inject constructor(private val remoteRepository: RemoteRe
 
     fun setViewPagerSwitch(page: PageType) = viewModelScope.launch {
         _setPageType.fineEmit(page, expectObserveCount = 2)
+    }
+
+    /**更版*/
+    fun intentUpdate(file: File, url: String) {
+        updateJob = viewModelScope.launch {
+            HttpClient().downloadFile(file, url).collect {
+                if (isActive) {
+                    _downloadStatus.emit(it)
+                }
+            }
+        }
+    }
+
+
+    /**取消*/
+    fun cancelUpdateJob() {
+        if (updateJob != null) {
+            updateJob?.cancel()
+        }
     }
 
 

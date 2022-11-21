@@ -32,7 +32,6 @@ abstract class BindingAlertDialog<out VB : ViewBinding>(
         _binding = inflate.invoke(layoutInflater)
         setContentView(binding.root)
 
-        setOwnerActivity(mContext as Activity) //important!!! OwnerActivity is for dispatchTouchEvent
 
 
         window?.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM)
