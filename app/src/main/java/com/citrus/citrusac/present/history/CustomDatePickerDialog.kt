@@ -48,8 +48,6 @@ class CustomDatePickerDialog(
 
 
 
-
-
             btnOK.onClick {
                 if (selectedDates.isEmpty()) {
                     YoYo.with(Techniques.Shake).duration(1000).playOn(calendarView)

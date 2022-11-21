@@ -4,7 +4,6 @@ package com.citrus.di
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
-import androidx.fragment.app.Fragment
 import androidx.viewbinding.BuildConfig
 import com.citrus.citrusac.present.current.adapter.CurrentAcAdapter
 import com.citrus.citrusac.present.history.adapter.HistoryAcAdapter

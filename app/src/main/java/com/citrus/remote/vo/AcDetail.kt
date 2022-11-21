@@ -8,4 +8,4 @@ data class AcDetailRequest(
 )
 
 
-data class AccessDetailResult(val status: Int, val data: AccessLatest)
+data class AccessDetailResult(val status: Int, val data: AccessLatest?)

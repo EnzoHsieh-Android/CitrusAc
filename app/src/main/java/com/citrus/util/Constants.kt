@@ -2,7 +2,6 @@ package com.citrus.util
 
 import android.annotation.SuppressLint
 import android.content.Context
-import androidx.core.content.ContextCompat
 import com.citrus.citrusac.R
 import com.citrus.di.prefs
 import com.google.android.material.chip.Chip

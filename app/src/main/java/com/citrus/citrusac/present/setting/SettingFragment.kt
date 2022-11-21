@@ -7,7 +7,6 @@ import com.citrus.util.base.BaseDialogFragment
 import com.citrus.util.onSafeClick
 import com.daimajia.androidanimations.library.Techniques
 import com.daimajia.androidanimations.library.YoYo
-import splitties.views.onClick
 
 class SettingFragment :
     BaseDialogFragment<FragmentSettingBinding>(FragmentSettingBinding::inflate, true) {

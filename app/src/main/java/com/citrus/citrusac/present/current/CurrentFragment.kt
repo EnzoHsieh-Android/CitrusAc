@@ -2,7 +2,6 @@ package com.citrus.citrusac.present.current
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
-import android.util.Log
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
@@ -57,6 +56,7 @@ class CurrentFragment : BaseFragment(R.layout.fragment_current) {
                 override fun onAnimationEnd(animation: Animator?) {
                     super.onAnimationEnd(animation)
                     scope.launch {
+                        delay(500)
                         binding.successAnimation.visibility = View.GONE
                     }
                 }

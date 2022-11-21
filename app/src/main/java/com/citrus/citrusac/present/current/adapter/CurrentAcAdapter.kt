@@ -11,9 +11,7 @@ import com.citrus.remote.vo.AccessLatest
 import com.citrus.util.Constants.getLogServerTime
 import com.citrus.util.base.BindingAdapter
 import com.citrus.util.onSafeClick
-import kotlinx.coroutines.delay
 import soup.neumorphism.ShapeType
-import splitties.views.onClick
 
 
 class CurrentAcAdapter :

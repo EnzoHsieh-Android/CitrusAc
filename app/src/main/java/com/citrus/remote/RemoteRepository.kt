@@ -12,7 +12,9 @@ class RemoteRepository @Inject constructor(private val apiService: ApiService) :
             if (result.data.status != 1) {
                 Resource.Error("Request Failed")
             } else {
-                Resource.Success(result.data.data)
+                result.data.data?.let {
+                    Resource.Success(it)
+                } ?: Resource.Error("Request Failed")
             }
         })
 
@@ -25,7 +27,10 @@ class RemoteRepository @Inject constructor(private val apiService: ApiService) :
             if (result.data.status != 1) {
                 Resource.Error("Request Failed")
             } else {
-                Resource.Success(result.data.data)
+                result.data.data?.let {
+                    Resource.Success(it)
+                } ?: Resource.Error("Data is null")
+
             }
         })
 
@@ -37,7 +42,9 @@ class RemoteRepository @Inject constructor(private val apiService: ApiService) :
             if (result.data.status != 1) {
                 Resource.Error("Request Failed")
             } else {
-                Resource.Success(result.data.data)
+                result.data.data?.let {
+                    Resource.Success(it)
+                } ?: Resource.Error("Data is null")
             }
         })
 
@@ -47,7 +54,9 @@ class RemoteRepository @Inject constructor(private val apiService: ApiService) :
                 if (result.data.status != 1) {
                     Resource.Error("Request Failed")
                 } else {
-                    Resource.Success(result.data.data)
+                    result.data.data?.let {
+                        Resource.Success(it)
+                    } ?: Resource.Error("Data is null")
                 }
             })
 
@@ -57,7 +66,9 @@ class RemoteRepository @Inject constructor(private val apiService: ApiService) :
                 if (result.data.status != 1) {
                     Resource.Error("Request Failed")
                 } else {
-                    Resource.Success(result.data.data)
+                    result.data.data?.let {
+                        Resource.Success(it)
+                    } ?: Resource.Error("Data is null")
                 }
             })
 }

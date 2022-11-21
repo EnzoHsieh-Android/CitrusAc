@@ -15,4 +15,4 @@ data class AccessData(
     val memo: String
 )
 
-data class AccessDataResult(val status: Int, val data: String)
+data class AccessDataResult(val status: Int, val data: String?)

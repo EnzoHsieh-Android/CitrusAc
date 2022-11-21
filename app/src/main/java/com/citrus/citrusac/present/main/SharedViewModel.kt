@@ -7,8 +7,6 @@ import com.citrus.di.prefs
 import com.citrus.remote.RemoteRepository
 import com.citrus.remote.Resource
 import com.citrus.remote.vo.AccessData
-import com.citrus.remote.vo.AccessHistory
-import com.citrus.remote.vo.AccessHistoryRequest
 import com.citrus.util.Constants
 import com.citrus.util.Constants.ERROR
 import com.citrus.util.Constants.SUCCESS
@@ -16,8 +14,6 @@ import com.citrus.util.Constants.getServerIP
 import com.citrus.util.MoshiUtil
 import com.citrus.util.ext.fineEmit
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject

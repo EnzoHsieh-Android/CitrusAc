@@ -14,7 +14,7 @@ data class AccessHistoryRequest(
     val queryStr: String,
 )
 
-data class AccessHistoryResult(val status: Int, val data: List<AccessHistory>)
+data class AccessHistoryResult(val status: Int, val data: List<AccessHistory>?)
 
 data class AccessHistory(
     @Json(name = "CustNo")

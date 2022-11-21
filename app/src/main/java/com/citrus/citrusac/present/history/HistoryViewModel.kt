@@ -1,6 +1,5 @@
 package com.citrus.citrusac.present.history
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.citrus.remote.RemoteRepository
@@ -11,13 +10,10 @@ import com.citrus.remote.vo.AccessHistoryRequest
 import com.citrus.remote.vo.AccessLatest
 import com.citrus.util.Constants
 import com.citrus.util.Constants.getCurrentDate
-import com.citrus.util.Constants.getCurrentTime
 import com.citrus.util.Constants.getServerIP
 import com.citrus.util.MoshiUtil
 import com.citrus.util.ext.fineEmit
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -87,7 +83,6 @@ class HistoryViewModel @Inject constructor(private val remoteRepository: RemoteR
                 getServerIP() + Constants.GET_RECORD_HISTORY,
                 MoshiUtil.toJson(accessHistoryRequest)
             ).collectLatest {
-                _acHistoryEmpty.fineEmit(false)
                 _acHistory.fineEmit(it)
             }
         }
@@ -104,8 +99,8 @@ class HistoryViewModel @Inject constructor(private val remoteRepository: RemoteR
         }
     }
 
-    fun setDataEmpty() = viewModelScope.launch {
-        _acHistoryEmpty.fineEmit(true)
+    fun setDataEmpty(bol:Boolean) = viewModelScope.launch {
+        _acHistoryEmpty.fineEmit(bol)
     }
 
 

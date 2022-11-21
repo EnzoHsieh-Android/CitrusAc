@@ -20,7 +20,7 @@
         app:layout_constraintStart_toStartOf="@+id/llInfo"
         app:layout_constraintTop_toTopOf="@+id/llInfo"
         app:tint="@color/colorGoldDeep"
-        android:elevation="@dimen/dp_50"
+        android:elevation="@dimen/dp_60"
         tools:visibility="visible" />
 
 

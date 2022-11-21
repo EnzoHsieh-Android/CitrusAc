@@ -3,6 +3,7 @@ package com.citrus.citrusac.present.main
 
 import android.util.TypedValue
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
@@ -13,15 +14,11 @@ import com.citrus.citrusac.present.current.ScanQrDialog
 import com.citrus.citrusac.present.setting.SettingFragment
 import com.citrus.di.prefs
 import com.citrus.util.base.BaseActivity
-import com.citrus.util.ext.lifecycleFlow
 import com.citrus.util.onSafeClick
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import soup.neumorphism.ShapeType
-import splitties.views.onClick
-
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate) {
@@ -51,6 +48,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                 ScanQrDialog { scanResult ->
                     MainScope().launch {
                         tvCustNo.setText(scanResult)
+                        llCheck.performClick()
                     }
                 }.show(supportFragmentManager, "ScanFragment")
             }
@@ -63,6 +61,16 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                     llCheck.isVisible = true
                     llQr.isVisible = false
                 }
+            }
+
+            tvCustNo.setOnEditorActionListener { _, id, _ ->
+                if (id == EditorInfo.IME_ACTION_DONE) {
+                    if (tvCustNo.text.isNotBlank()) {
+                        llCheck.performClick()
+                        tvCustNo.clearFocus()
+                    }
+                }
+                false
             }
 
             tvCurrent.onSafeClick {
@@ -134,5 +142,4 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             }
         }
     }
-
 }

@@ -1,6 +1,5 @@
 package com.citrus.citrusac.present.current
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.citrus.remote.RemoteRepository

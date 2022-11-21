@@ -2,20 +2,14 @@ package com.citrus.citrusac.present.history.adapter
 
 import android.content.res.ColorStateList
 import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
-import com.bumptech.glide.Glide
 import com.citrus.citrusac.R
-import com.citrus.citrusac.databinding.ItemCurrentBinding
 import com.citrus.citrusac.databinding.ItemHistoryBinding
 import com.citrus.citrusac.present.main.PageType
 import com.citrus.remote.vo.AccessHistory
-import com.citrus.remote.vo.AccessLatest
 import com.citrus.util.Constants.getLogServerDateTime
-import com.citrus.util.Constants.getLogServerTime
 import com.citrus.util.base.BindingAdapter
 import com.citrus.util.onSafeClick
 import soup.neumorphism.ShapeType
-import splitties.views.onClick
 
 
 class HistoryAcAdapter :

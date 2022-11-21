@@ -76,10 +76,9 @@ fun <T, DATA> resultFlowData(
         emit(Resource.Error(cause.message!!))
         return@retryWhen false
     }
-}.onCompletion { emit(Resource.Loading(false)) }
-    .catch {
-        Log.e("error", it.localizedMessage)
-    }.flowOn(Dispatchers.IO)
+}.onStart { emit(Resource.Loading(true)) }.onCompletion { emit(Resource.Loading(false)) }.catch {
+    Log.e("error", it.localizedMessage ?: "")
+}.flowOn(Dispatchers.IO)
 
 
 

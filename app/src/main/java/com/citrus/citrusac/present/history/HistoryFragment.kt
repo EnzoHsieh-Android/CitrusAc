@@ -71,7 +71,6 @@ class HistoryFragment : BaseFragment(R.layout.fragment_history) {
 
             }
 
-
             tvQuery.doOnTextChanged { text, _, _, _ ->
                 viewModel.accept(UiAction.SearchStr(queryStr = text.toString()))
             }
@@ -80,9 +79,8 @@ class HistoryFragment : BaseFragment(R.layout.fragment_history) {
                 tvDate.text = ""
                 tvDate.hint = "不限時段"
 
-                val dates =
+                val dates = listOf("", "")
 
-                    listOf("", "")
                 viewModel.accept(UiAction.SearchDate(dates = dates))
             }
 
@@ -127,7 +125,7 @@ class HistoryFragment : BaseFragment(R.layout.fragment_history) {
                     binding.loadingBar.isVisible = it.isLoading
                 }
                 is Resource.Error -> {
-                    viewModel.setDataEmpty()
+                    viewModel.setDataEmpty(true)
                 }
             }
         }
@@ -136,13 +134,10 @@ class HistoryFragment : BaseFragment(R.layout.fragment_history) {
             when (it) {
                 is Resource.Success -> {
                     updateInfoDetail(it.data)
+                    viewModel.setDataEmpty(false)
                 }
-                is Resource.Loading -> {
-
-                }
-                is Resource.Error -> {
-
-                }
+                is Resource.Loading -> Unit
+                is Resource.Error -> Unit
             }
         }
     }
@@ -156,8 +151,6 @@ class HistoryFragment : BaseFragment(R.layout.fragment_history) {
 
     private fun updateInfoDetail(info: AccessLatest) {
         binding.apply {
-            noneInfo.visibility = View.GONE
-
             Glide.with(root)
                 .load(info.photoPath)
                 .placeholder(R.drawable.default_user)
