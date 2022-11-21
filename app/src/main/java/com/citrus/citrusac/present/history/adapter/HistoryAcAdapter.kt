@@ -1,5 +1,6 @@
 package com.citrus.citrusac.present.history.adapter
 
+import android.annotation.SuppressLint
 import android.content.res.ColorStateList
 import androidx.core.content.ContextCompat
 import com.citrus.citrusac.R
@@ -18,6 +19,7 @@ class HistoryAcAdapter :
         PageType.History
     ) {
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun convert(binding: ItemHistoryBinding, item: AccessHistory, position: Int) {
         binding.apply {
 
@@ -42,11 +44,9 @@ class HistoryAcAdapter :
 
             root.onSafeClick {
                 if (!item.selected) {
-                    var oldPos = -1
-                    data.forEachIndexed { index, accessHistory ->
+                    data.forEachIndexed { _, accessHistory ->
                         if (accessHistory.selected) {
                             accessHistory.selected = false
-                            oldPos = index
                         }
                     }
 

@@ -88,12 +88,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
     override fun initObserve() {
         lifecycleScope.launchWhenStarted {
-            sharedViewModel.acTitleChange.collectLatest {
-                //binding.tvTitle.text = it
-            }
-        }
-
-        lifecycleScope.launchWhenStarted {
             sharedViewModel.setAcDataSuccess.collectLatest {
                 binding.tvCustNo.text.clear()
             }

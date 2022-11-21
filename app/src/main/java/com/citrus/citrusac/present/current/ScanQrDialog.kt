@@ -37,17 +37,11 @@ class ScanQrDialog(val scanResult: (String) -> Unit ): BaseDialogFragment<Dailog
     }
 
 
-    override fun initView() {
+    override fun initView() = Unit
 
-    }
+    override fun initAction() = Unit
 
-    override fun initAction() {
-
-    }
-
-    override fun clearMemory() {
-
-    }
+    override fun clearMemory() = Unit
 
     private fun setupControls() {
         barcodeDetector =

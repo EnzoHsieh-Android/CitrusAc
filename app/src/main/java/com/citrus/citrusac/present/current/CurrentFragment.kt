@@ -2,6 +2,7 @@ package com.citrus.citrusac.present.current
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
+import android.annotation.SuppressLint
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
@@ -130,6 +131,7 @@ class CurrentFragment : BaseFragment(R.layout.fragment_current) {
 
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun initAction() {
         currentAcAdapter.setOnClickListener {
             updateInfoDetail(it)
@@ -138,6 +140,7 @@ class CurrentFragment : BaseFragment(R.layout.fragment_current) {
     }
 
 
+    @SuppressLint("SetTextI18n")
     private fun updateInfoDetail(info: AccessLatest) {
         binding.apply {
             noneInfo.visibility = View.GONE

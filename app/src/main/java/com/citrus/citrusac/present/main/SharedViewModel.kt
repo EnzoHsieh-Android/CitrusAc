@@ -1,6 +1,5 @@
 package com.citrus.citrusac.present.main
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.citrus.di.prefs
@@ -29,10 +28,6 @@ sealed class PageType {
 class SharedViewModel @Inject constructor(private val remoteRepository: RemoteRepository) :
     ViewModel() {
 
-
-    private val _acTitleChange = MutableSharedFlow<String>()
-    val acTitleChange: SharedFlow<String> = _acTitleChange
-
     private val _setAcDataSuccess = MutableSharedFlow<String>()
     val setAcDataSuccess: SharedFlow<String> = _setAcDataSuccess
 
@@ -40,9 +35,6 @@ class SharedViewModel @Inject constructor(private val remoteRepository: RemoteRe
     val setPageType: SharedFlow<PageType> = _setPageType
 
 
-    fun setTitleChange(title: String) = viewModelScope.launch {
-        _acTitleChange.fineEmit(title)
-    }
 
     fun setAcData(custNo: String, status: String = "I", memo: String = "") = viewModelScope.launch {
         remoteRepository.setAcData(
@@ -63,9 +55,7 @@ class SharedViewModel @Inject constructor(private val remoteRepository: RemoteRe
                 is Resource.Error -> {
                     _setAcDataSuccess.fineEmit(ERROR, 2)
                 }
-                is Resource.Loading -> {
-                    Log.d("setAcData", "Loading")
-                }
+                is Resource.Loading -> Unit
             }
         }
     }

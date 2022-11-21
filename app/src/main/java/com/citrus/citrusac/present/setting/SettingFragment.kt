@@ -1,5 +1,6 @@
 package com.citrus.citrusac.present.setting
 
+import android.annotation.SuppressLint
 import com.citrus.citrusac.BuildConfig
 import com.citrus.citrusac.databinding.FragmentSettingBinding
 import com.citrus.di.prefs
@@ -11,6 +12,7 @@ import com.daimajia.androidanimations.library.YoYo
 class SettingFragment :
     BaseDialogFragment<FragmentSettingBinding>(FragmentSettingBinding::inflate, true) {
 
+    @SuppressLint("SetTextI18n")
     override fun initView() {
         isCancelable = false
 
@@ -18,7 +20,8 @@ class SettingFragment :
             etServerIp.setText(prefs.serverIp)
             etDeviceId.setText(prefs.deviceId)
 
-            tvVersion.text =  "v${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})${if (BuildConfig.DEBUG) " - DEBUG" else ""}"
+            tvVersion.text =
+                "v${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})${if (BuildConfig.DEBUG) " - DEBUG" else ""}"
 
             llCheck.onSafeClick {
                 if (etServerIp.text.isBlank()) {
@@ -40,12 +43,8 @@ class SettingFragment :
         }
     }
 
-    override fun initAction() {
+    override fun initAction() = Unit
 
-    }
-
-    override fun clearMemory() {
-
-    }
+    override fun clearMemory() = Unit
 
 }

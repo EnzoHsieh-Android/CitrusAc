@@ -19,7 +19,7 @@ class CustomDatePickerDialog(
     private val datePickType: DatePickType = DatePickType.OnlyDate,
     private val maxSelectedSize: Int = 3,
     private val listener: (List<LocalDateTime>) -> Unit,
-) : BaseDialogFragment<DailogDatePickerBinding>(DailogDatePickerBinding::inflate,false) {
+) : BaseDialogFragment<DailogDatePickerBinding>(DailogDatePickerBinding::inflate, false) {
 
 
     var selectedDates = selectedDateTimes.map { it.toLocalDate() }.toMutableList()
@@ -83,8 +83,6 @@ class CustomDatePickerDialog(
                     return@onClick
                 }
 
-
-
                 listener(selectedDateTimes)
                 dismiss()
             }
@@ -115,14 +113,9 @@ class CustomDatePickerDialog(
     }
 
 
+    override fun initAction() = Unit
 
-    override fun initAction() {
-
-    }
-
-    override fun clearMemory() {
-
-    }
+    override fun clearMemory() = Unit
 
 
 }

@@ -1,5 +1,6 @@
 package com.citrus.citrusac.present.history
 
+import android.annotation.SuppressLint
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
@@ -48,6 +49,7 @@ class HistoryFragment : BaseFragment(R.layout.fragment_history) {
     }
 
 
+    @SuppressLint("SetTextI18n")
     override fun initView() {
         binding.apply {
             tvDate.text = LocalDateTime.now().toDateStr() + " ~ " + LocalDateTime.now().toDateStr()
@@ -149,6 +151,7 @@ class HistoryFragment : BaseFragment(R.layout.fragment_history) {
     }
 
 
+    @SuppressLint("SetTextI18n")
     private fun updateInfoDetail(info: AccessLatest) {
         binding.apply {
             Glide.with(root)
