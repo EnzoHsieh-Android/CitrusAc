@@ -7,5 +7,3 @@ data class AcDetailRequest(
     val custNo: String
 )
 
-
-data class AccessDetailResult(val status: Int, val data: AccessLatest?)

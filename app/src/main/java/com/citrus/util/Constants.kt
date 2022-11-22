@@ -16,13 +16,11 @@ object Constants {
     var screenH = 0
     const val SUCCESS = "success"
     const val ERROR = "error"
+    const val NO_DATA = "No Data"
 
     const val BASE_URL = "https://cms.citrus.tw"
 
-
-    const val API = "/taroko/POSServer/TarokoWS/Service.asmx/SetOrdersPeriodByStatus"
     const val SHARED_PREFERENCES_NAME = "sharedPref"
-    const val SAMPLE_QR = "http://localhost:64698/Home/Index?S=JPS00290&Q=W012022110100001"
 
     const val GET_SERIAL = "/CitrusAC/Service.asmx/GetCustSerial"
     const val GET_MEMBER_DETAIL = "/CitrusAC/Service.asmx/GetMemberDetail"
@@ -31,7 +29,6 @@ object Constants {
     const val SET_ACCESS_DATA = "/AC/Service.asmx/SetCustAccessData"
     const val DOWNLOAD_URL = "http://hq.citrus.tw/apk/"
     val serverDateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
-
 
     fun getServerIP(): String {
         return prefs.serverIp

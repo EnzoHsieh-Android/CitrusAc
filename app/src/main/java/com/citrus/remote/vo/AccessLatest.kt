@@ -3,8 +3,6 @@ package com.citrus.remote.vo
 import com.squareup.moshi.Json
 
 
-data class AccessLatestResult(val status: Int, val data: List<AccessLatest>?)
-
 data class AccessLatest(
     @Json(name = "CustNo")
     val custNo: String,

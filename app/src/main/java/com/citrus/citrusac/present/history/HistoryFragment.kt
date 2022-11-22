@@ -18,10 +18,7 @@ import com.citrus.remote.vo.AccessHistory
 import com.citrus.remote.vo.AccessLatest
 import com.citrus.util.Constants
 import com.citrus.util.base.BaseFragment
-import com.citrus.util.ext.lifecycleFlow
-import com.citrus.util.ext.toDateStr
-import com.citrus.util.ext.toDateStr2
-import com.citrus.util.ext.viewBinding
+import com.citrus.util.ext.*
 import dagger.hilt.android.AndroidEntryPoint
 import splitties.views.onClick
 import java.time.LocalDateTime
@@ -127,7 +124,18 @@ class HistoryFragment : BaseFragment(R.layout.fragment_history) {
                     binding.loadingBar.isVisible = it.isLoading
                 }
                 is Resource.Error -> {
-                    viewModel.setDataEmpty(true)
+                    if (it.exception == Constants.NO_DATA) {
+                        viewModel.setDataEmpty(true)
+                    }else {
+                        viewModel.setDataEmpty(true)
+                        showErrDialog(
+                            title = "與系統連線發生問題",
+                            msg = it.exception,
+                            onConfirmListener = {
+
+                            }
+                        )
+                    }
                 }
             }
         }

@@ -122,13 +122,22 @@ class CurrentFragment : BaseFragment(R.layout.fragment_current) {
                 }
 
                 is Resource.Error -> {
-                    binding.rvCurrent.isVisible = false
-                    binding.noneInfo.isVisible = true
-                    binding.noneInfo2.isVisible = true
+                    if (it.exception == Constants.NO_DATA) {
+                        binding.rvCurrent.isVisible = false
+                        binding.noneInfo.isVisible = true
+                        binding.noneInfo2.isVisible = true
+                    }else {
+                        showErrDialog(
+                            title = "與系統連線發生問題",
+                            msg = it.exception,
+                            onConfirmListener = {
+                                viewModel.getRecordLatest()
+                            }
+                        )
+                    }
                 }
             }
         }
-
     }
 
     @SuppressLint("NotifyDataSetChanged")

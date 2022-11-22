@@ -3,8 +3,6 @@ package com.citrus.remote.vo
 import com.squareup.moshi.Json
 
 
-//{"LogTime_Start":"2022/11/09","LogTime_End":"2022/11/11","CustNo":"","Name":"","PID":""}
-
 data class AccessHistoryRequest(
     @Json(name = "LogTime_Start")
     val logTimeStart: String,
@@ -13,8 +11,6 @@ data class AccessHistoryRequest(
     @Json(name = "QueryStr")
     val queryStr: String,
 )
-
-data class AccessHistoryResult(val status: Int, val data: List<AccessHistory>?)
 
 data class AccessHistory(
     @Json(name = "CustNo")
@@ -33,6 +29,6 @@ data class AccessHistory(
     val isNote: String,
     @Json(name = "Status")
     val status: String,
-    @Transient
+    @Json(ignore = true)
     var selected: Boolean = false
-    )
+)

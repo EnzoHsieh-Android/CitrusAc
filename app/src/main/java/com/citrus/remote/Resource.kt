@@ -1,6 +1,7 @@
 package com.citrus.remote
 
-import android.util.Log
+import com.citrus.remote.vo.ApiResult
+import com.citrus.util.Constants
 import com.skydoves.sandwich.ApiResponse
 import com.skydoves.sandwich.suspendOnError
 import com.skydoves.sandwich.suspendOnException
@@ -46,22 +47,27 @@ enum class Status {
 
 class RetryCondition(val errorMsg: String) : Exception()
 
+
 /**基於sandwich進一步封裝含retry功能、error錯誤處理,僅抽出success各自實作*/
 /**crossInline：讓函數類型的參數可以被間接調用，但無法return*/
 /**noInline：函數類型的參數在inline時會無法被當成對象來使用，需用noinline局部關閉inline效果*/
-fun <T, DATA> resultFlowData(
-    apiAction: suspend () -> ApiResponse<T>,
-    onSuccess: (ApiResponse.Success<T>) -> Resource<DATA>
+fun <T> resultFlowData(
+    apiAction: suspend () -> ApiResponse<ApiResult<T>>
 ) = flow {
     apiAction().suspendOnSuccess {
-        emit(onSuccess(this))
+        emit(if (this.data.status != 1) {
+            Resource.Error(Constants.NO_DATA)
+        } else {
+            this.data.data?.let {
+                Resource.Success(it)
+            } ?: Resource.Error("Server Error")
+        })
     }.suspendOnError {
-        throw RetryCondition(this.statusCode.name)
+        throw RetryCondition(errorMsg = this.statusCode.name)
     }.suspendOnException {
-        throw RetryCondition(this.exception.message!!)
+        throw RetryCondition(errorMsg = this.exception.message!!)
     }
 }.retryWhen { cause, attempt ->
-
     val delayTime = when (attempt) {
         0L -> 3000L
         1L -> 9000L
@@ -76,9 +82,8 @@ fun <T, DATA> resultFlowData(
         emit(Resource.Error(cause.message!!))
         return@retryWhen false
     }
-}.onStart { emit(Resource.Loading(true)) }.onCompletion { emit(Resource.Loading(false)) }.catch {
-    Log.e("error", it.localizedMessage ?: "")
+}.onStart { emit(Resource.Loading(true)) }
+    .onCompletion { emit(Resource.Loading(false)) }
+    .catch { emit(Resource.Error(it.message ?: it.localizedMessage ?: "UnExcept Error"))
 }.flowOn(Dispatchers.IO)
-
-
 

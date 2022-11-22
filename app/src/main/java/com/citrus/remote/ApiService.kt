@@ -7,37 +7,33 @@ import retrofit2.http.*
 
 
 interface ApiService {
+
     @GET
     suspend fun getAcSerial(
         @Url url: String
-    ): ApiResponse<CustomSerialResult>
-
-    @GET
-    suspend fun getAcSerial2(
-        @Url url: String
-    ): ApiResponse<CustomSerialResult>
+    ): ApiResponse<ApiResult<CustomSerial>>
 
     @GET
     suspend fun getAcLatest(
         @Url url: String
-    ): ApiResponse<AccessLatestResult>
+    ): ApiResponse<ApiResult<List<AccessLatest>>>
 
     @GET
     suspend fun getAcHistory(
         @Url url: String,
         @Query("jsonData") jsonStr: String
-    ): ApiResponse<AccessHistoryResult>
+    ): ApiResponse<ApiResult<List<AccessHistory>>>
 
     @GET
     suspend fun getAcDetail(
         @Url url: String,
         @Query("jsonData") jsonStr: String
-    ): ApiResponse<AccessDetailResult>
+    ): ApiResponse<ApiResult<AccessLatest>>
 
     @GET
     suspend fun setAcData(
         @Url url: String,
         @Query("jsonData") jsonStr: String
-    ): ApiResponse<AccessDataResult>
+    ): ApiResponse<ApiResult<String>>
 
 }
