@@ -11,7 +11,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintDimensionRatio="1:1"
-        android:background="@drawable/bg_gold"
+        android:background="@drawable/bg_overlay"
         android:elevation="@dimen/dp_50"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -32,7 +32,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:lottie_autoPlay="false"
-            app:lottie_fileName="success_result.json"
+            app:lottie_fileName="success.json"
             app:lottie_loop="false"
             tools:visibility="visible" />
 

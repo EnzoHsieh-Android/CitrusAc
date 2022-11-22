@@ -91,14 +91,14 @@ class CurrentFragment : BaseFragment(R.layout.fragment_current) {
         lifecycleFlow(sharedViewModel.setAcDataSuccess) {
             when (it) {
                 Constants.SUCCESS -> {
-                    binding.resultSuccess.setAnimation("success_result.json")
+                    binding.resultSuccess.setAnimation("success.json")
                     binding.successAnimation.visibility = View.VISIBLE
                     binding.resultSuccess.playAnimation()
                     binding.resultHint.text = "補登成功！"
                 }
 
                 Constants.ERROR -> {
-                    binding.resultSuccess.setAnimation("error2.json")
+                    binding.resultSuccess.setAnimation("error.json")
                     binding.successAnimation.visibility = View.VISIBLE
                     binding.resultSuccess.playAnimation()
                     binding.resultHint.text = "查無會員資料"
