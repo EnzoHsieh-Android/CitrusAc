@@ -20,8 +20,6 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>(ActivitySplashBinding
                 startActivity(Intent(this, MainActivity::class.java))
                 finish()
             }.playOn(binding.ivSplash)
-
-
     }
 
     override fun initObserve() = Unit

@@ -32,8 +32,8 @@ import javax.inject.Singleton
 interface AppModule {
     companion object {
         private const val DEFAULT_CONNECT_TIME = 10L
-        private const val DEFAULT_WRITE_TIME = 30L
-        private const val DEFAULT_READ_TIME = 30L
+        private const val DEFAULT_WRITE_TIME = 20L
+        private const val DEFAULT_READ_TIME = 20L
 
         @Provides
         @Singleton

@@ -25,8 +25,6 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
             viewPager.offscreenPageLimit = 2
             viewPager.adapter = collectionAdapter
         }
-
-
     }
 
     override fun initObserve() {
@@ -45,10 +43,8 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
 
     override fun initAction() = Unit
 
-
     inner class CollectionAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
         override fun getItemCount(): Int = 2
-
         override fun createFragment(position: Int): Fragment {
             return when (position) {
                 0 -> CurrentFragment.newInstance()
@@ -56,6 +52,5 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
                 else -> CurrentFragment.newInstance()
             }
         }
-
     }
 }

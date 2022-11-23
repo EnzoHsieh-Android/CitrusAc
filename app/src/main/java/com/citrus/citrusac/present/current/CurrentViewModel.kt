@@ -51,6 +51,7 @@ class CurrentViewModel @Inject constructor(private val remoteRepository: RemoteR
     }
 
 
+    /**需要stateFlow的特性來達成後續接收的SerialNum沒有變化時就不觸發View collect的特性，所以在此處理Resources判斷*/
     private fun getAcSerial() = viewModelScope.launch {
         remoteRepository.getAcSerial(getServerIP() + Constants.GET_SERIAL).collectLatest {
             when (it) {

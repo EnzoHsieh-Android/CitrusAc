@@ -71,8 +71,6 @@ class HistoryAcAdapter :
         binding: ItemHistoryBinding,
         item: AccessHistory,
         position: Int
-    ) {
-
-    }
+    ) = Unit
 
 }

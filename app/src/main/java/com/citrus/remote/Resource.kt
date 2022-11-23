@@ -47,12 +47,11 @@ enum class Status {
 
 class RetryCondition(val errorMsg: String) : Exception()
 
-
 /**基於sandwich進一步封裝含retry功能、error錯誤處理,僅抽出success各自實作*/
 /**crossInline：讓函數類型的參數可以被間接調用，但無法return*/
 /**noInline：函數類型的參數在inline時會無法被當成對象來使用，需用noinline局部關閉inline效果*/
 fun <T> resultFlowData(
-    apiAction: suspend () -> ApiResponse<ApiResult<T>>
+    apiAction: suspend () -> ApiResponse<ApiResult<T>>,
 ) = flow {
     apiAction().suspendOnSuccess {
         emit(if (this.data.status != 1) {
@@ -69,9 +68,9 @@ fun <T> resultFlowData(
     }
 }.retryWhen { cause, attempt ->
     val delayTime = when (attempt) {
-        0L -> 3000L
-        1L -> 9000L
-        2L -> 15000L
+        0L -> 1000L
+        1L -> 2000L
+        2L -> 4000L
         else -> 3000L
     }
 

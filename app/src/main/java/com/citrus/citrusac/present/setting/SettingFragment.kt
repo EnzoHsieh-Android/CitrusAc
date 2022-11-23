@@ -141,7 +141,6 @@ class SettingFragment :
     }
 
     private fun downloadApk(name: String) {
-
         if (name == BuildConfig.VERSION_NAME) {
             Toast.makeText(activity, "已是最新版本，無需更新", Toast.LENGTH_SHORT).show()
             return

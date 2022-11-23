@@ -16,13 +16,13 @@ import com.citrus.di.prefs
 import com.citrus.util.base.BaseActivity
 import com.citrus.util.onSafeClick
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate) {
     private val sharedViewModel: SharedViewModel by viewModels()
+    var scope = CoroutineScope(Job() + Dispatchers.Main)
 
 
     override fun initView() {
@@ -46,7 +46,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
             llQr.onSafeClick {
                 ScanQrDialog { scanResult ->
-                    MainScope().launch {
+                    scope.launch {
                         tvCustNo.setText(scanResult)
                         llCheck.performClick()
                     }

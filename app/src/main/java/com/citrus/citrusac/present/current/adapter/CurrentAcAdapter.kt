@@ -69,8 +69,6 @@ class CurrentAcAdapter :
         binding: ItemCurrentBinding,
         item: AccessLatest,
         position: Int
-    ) {
-
-    }
+    ) = Unit
 
 }
