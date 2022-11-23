@@ -6,20 +6,29 @@ import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.citrus.citrusac.R
 import com.citrus.citrusac.databinding.FragmentHistoryBinding
+import com.citrus.citrusac.present.current.adapter.MemoAdapter
+import com.citrus.citrusac.present.current.adapter.ResAdapter
 import com.citrus.citrusac.present.history.adapter.HistoryAcAdapter
 import com.citrus.citrusac.present.main.PageType
 import com.citrus.citrusac.present.main.SharedViewModel
 import com.citrus.remote.Resource
 import com.citrus.remote.vo.AccessHistory
 import com.citrus.remote.vo.AccessLatest
+import com.citrus.remote.vo.Reservation
 import com.citrus.util.Constants
 import com.citrus.util.base.BaseFragment
 import com.citrus.util.ext.*
+import com.citrus.util.onSafeClick
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import soup.neumorphism.ShapeType
 import splitties.views.onClick
 import java.time.LocalDateTime
 import javax.inject.Inject
@@ -34,6 +43,14 @@ class HistoryFragment : BaseFragment(R.layout.fragment_history) {
     @Inject
     lateinit var historyAcAdapter: HistoryAcAdapter
 
+    @Inject
+    lateinit var memoAdapter: MemoAdapter
+
+    @Inject
+    lateinit var resAdapter: ResAdapter
+
+    var hasRes = false
+
     companion object {
         fun newInstance(): HistoryFragment {
             return HistoryFragment()
@@ -44,7 +61,6 @@ class HistoryFragment : BaseFragment(R.layout.fragment_history) {
         super.onResume()
         sharedViewModel.setViewPagerSwitch(PageType.History)
     }
-
 
     @SuppressLint("SetTextI18n")
     override fun initView() {
@@ -88,6 +104,40 @@ class HistoryFragment : BaseFragment(R.layout.fragment_history) {
                 viewModel.accept(UiAction.SearchStr(queryStr = ""))
             }
 
+            memoRv.apply {
+                layoutManager = LinearLayoutManager(requireContext())
+                adapter = memoAdapter
+            }
+
+            resRv.apply {
+                layoutManager = GridLayoutManager(requireContext(), 2)
+                adapter = resAdapter
+            }
+
+            llMemo.onSafeClick {
+                if (llMemo.getShapeType() == ShapeType.FLAT) {
+                    llMemo.setShapeType(ShapeType.PRESSED)
+                    memoRv.isVisible = true
+                    ivMemo.setImageResource(R.drawable.ic_baseline_unfold_less_24)
+                } else {
+                    llMemo.setShapeType(ShapeType.FLAT)
+                    memoRv.visibility = if (hasRes) View.GONE else View.INVISIBLE
+                    ivMemo.setImageResource(R.drawable.ic_baseline_unfold_more_24)
+                }
+            }
+
+            llRes.onSafeClick {
+                if (llRes.getShapeType() == ShapeType.FLAT) {
+                    llRes.setShapeType(ShapeType.PRESSED)
+                    resRv.isVisible = true
+                    ivRes.setImageResource(R.drawable.ic_baseline_unfold_less_24)
+                } else {
+                    llRes.setShapeType(ShapeType.FLAT)
+                    resRv.isVisible = false
+                    ivRes.setImageResource(R.drawable.ic_baseline_unfold_more_24)
+                }
+            }
+
         }
 
     }
@@ -126,7 +176,7 @@ class HistoryFragment : BaseFragment(R.layout.fragment_history) {
                 is Resource.Error -> {
                     if (it.exception == Constants.NO_DATA) {
                         viewModel.setDataEmpty(true)
-                    }else {
+                    } else {
                         viewModel.setDataEmpty(true)
                         showErrDialog(
                             title = "與系統連線發生問題",
@@ -172,31 +222,33 @@ class HistoryFragment : BaseFragment(R.layout.fragment_history) {
             tvBirthday.text = Constants.getFromServerTime(info.birth)
 
             if (info.notes.isNotEmpty()) {
-                Constants.setChips(
-                    requireContext(),
-                    info.notes.map { it.note },
-                    binding.memoChip,
-                    binding.tvBirthday.textSize
-                )
-                binding.hashTag.isVisible = true
-                binding.llMemoChip.isVisible = true
+                val notes = info.notes.map { it.note }
+                CoroutineScope(Dispatchers.Main).launch {
+                    memoAdapter.updateDataset(notes as MutableList<String>)
+                }
+                binding.tvMemoSize.text = "${notes.size}"
+                binding.llMemo.isVisible = true
+                binding.llMemo.setShapeType(ShapeType.PRESSED)
+                binding.memoRv.isVisible = true
             } else {
-                binding.hashTag.isVisible = false
-                binding.llMemoChip.isVisible = false
+                binding.llMemo.isVisible = false
+                binding.memoRv.isVisible = false
             }
 
+
             if (info.resData.isNotEmpty()) {
-                llResInfo.visibility = View.VISIBLE
-                resTime.text = Constants.getResServerTime(info.resData[0].resTime)
-                resNum.text = info.resData[0].custNum.toString() + "人"
-                if (info.resData[0].memo.isNotBlank()) {
-                    resMemo.text = info.resData[0].memo
-                    resMemo.visibility = View.VISIBLE
-                } else {
-                    resMemo.visibility = View.GONE
+                hasRes = true
+                CoroutineScope(Dispatchers.Main).launch {
+                    resAdapter.updateDataset(info.resData as MutableList<Reservation>)
                 }
+
+                binding.tvResSize.text = "${info.resData.size}"
+                binding.llRes.isVisible = true
+                binding.llRes.setShapeType(ShapeType.PRESSED)
+                binding.resRv.isVisible = true
             } else {
-                llResInfo.visibility = View.GONE
+                binding.llRes.isVisible = false
+                binding.resRv.isVisible = false
             }
 
             llDetailInfo.isVisible = true

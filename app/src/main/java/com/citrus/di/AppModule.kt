@@ -6,6 +6,8 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.viewbinding.BuildConfig
 import com.citrus.citrusac.present.current.adapter.CurrentAcAdapter
+import com.citrus.citrusac.present.current.adapter.MemoAdapter
+import com.citrus.citrusac.present.current.adapter.ResAdapter
 import com.citrus.citrusac.present.history.adapter.HistoryAcAdapter
 import com.citrus.remote.ApiService
 import com.citrus.util.Constants
@@ -110,6 +112,14 @@ object FragmentModule {
     @Provides
     fun provideHistoryAcAdapter() =
         HistoryAcAdapter()
+
+    @Provides
+    fun provideMemoAdapter() =
+        MemoAdapter()
+
+    @Provides
+    fun provideResAdapter() =
+        ResAdapter()
 
 }
 

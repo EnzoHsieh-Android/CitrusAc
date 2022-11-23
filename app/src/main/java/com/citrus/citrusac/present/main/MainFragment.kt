@@ -18,7 +18,6 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
     private var collectionAdapter: CollectionAdapter? = null
     private val sharedViewModel: SharedViewModel by activityViewModels()
 
-
     override fun initView() {
         collectionAdapter = CollectionAdapter(this)
         binding.apply {
@@ -38,7 +37,6 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
                 }
             }
         }
-
     }
 
     override fun initAction() = Unit

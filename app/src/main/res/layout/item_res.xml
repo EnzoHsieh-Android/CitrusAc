@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/dp_5"
+    android:background="@drawable/bg_white"
+    android:padding="@dimen/dp_20">
+
+
+    <TextView
+        android:id="@+id/tvTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="start|center"
+        android:text="2022/05/21 17:30"
+        android:textColor="@color/white"
+        android:textSize="@dimen/dp_22"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvCusNum"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="2人"
+        android:textColor="@color/white"
+        android:textSize="@dimen/dp_22"
+        app:layout_constraintStart_toEndOf="@+id/tvTime"
+        app:layout_constraintTop_toTopOf="@+id/tvTime"
+        app:layout_constraintBottom_toBottomOf="@+id/tvTime"
+        android:layout_marginStart="@dimen/dp_20"/>
+
+
+    <TextView
+        android:id="@+id/tvMemo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="start|center"
+        android:maxLines="2"
+        android:minLines="2"
+        android:text="備註：無"
+        android:textColor="@color/white"
+        android:textSize="@dimen/dp_20"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/tvCusNum"
+        app:layout_constraintTop_toBottomOf="@+id/tvTime" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="tvCusNum,tvMemo"
+        app:barrierDirection="end"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

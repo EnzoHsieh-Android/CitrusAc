@@ -71,6 +71,4 @@ class CurrentViewModel @Inject constructor(private val remoteRepository: RemoteR
             _acLatest.emit(it)
         }
     }
-
-
 }

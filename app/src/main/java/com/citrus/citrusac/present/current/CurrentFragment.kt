@@ -8,24 +8,29 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.citrus.citrusac.R
 import com.citrus.citrusac.databinding.FragmentCurrentBinding
 import com.citrus.citrusac.present.current.adapter.CurrentAcAdapter
+import com.citrus.citrusac.present.current.adapter.MemoAdapter
+import com.citrus.citrusac.present.current.adapter.ResAdapter
 import com.citrus.citrusac.present.main.PageType
 import com.citrus.citrusac.present.main.SharedViewModel
 import com.citrus.remote.Resource
 import com.citrus.remote.vo.AccessLatest
+import com.citrus.remote.vo.Reservation
 import com.citrus.util.Constants
 import com.citrus.util.Constants.getFromServerTime
 import com.citrus.util.Constants.getResServerTime
-import com.citrus.util.Constants.setChips
 import com.citrus.util.base.BaseFragment
 import com.citrus.util.ext.lifecycleFlow
 import com.citrus.util.ext.showErrDialog
 import com.citrus.util.ext.viewBinding
+import com.citrus.util.onSafeClick
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
+import soup.neumorphism.ShapeType
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -35,8 +40,17 @@ class CurrentFragment : BaseFragment(R.layout.fragment_current) {
     private val sharedViewModel: SharedViewModel by activityViewModels()
     var scope = CoroutineScope(Job() + Dispatchers.Main)
 
+    var hasRes = false
+
+
     @Inject
     lateinit var currentAcAdapter: CurrentAcAdapter
+
+    @Inject
+    lateinit var memoAdapter: MemoAdapter
+
+    @Inject
+    lateinit var resAdapter: ResAdapter
 
     companion object {
         fun newInstance(): CurrentFragment {
@@ -49,7 +63,6 @@ class CurrentFragment : BaseFragment(R.layout.fragment_current) {
         viewModel.startFetchJob()
         sharedViewModel.setViewPagerSwitch(PageType.Current)
     }
-
 
     override fun initView() {
         binding.apply {
@@ -66,6 +79,41 @@ class CurrentFragment : BaseFragment(R.layout.fragment_current) {
             rvCurrent.apply {
                 layoutManager = GridLayoutManager(requireContext(), 2)
                 adapter = currentAcAdapter
+            }
+
+            memoRv.apply {
+                layoutManager = LinearLayoutManager(requireContext())
+                adapter = memoAdapter
+            }
+
+            resRv.apply {
+                layoutManager = GridLayoutManager(requireContext(), 2)
+                adapter = resAdapter
+            }
+
+            llMemo.onSafeClick {
+                if (llMemo.getShapeType() == ShapeType.FLAT) {
+                    llMemo.setShapeType(ShapeType.PRESSED)
+                    memoRv.visibility = View.VISIBLE
+                    ivMemo.setImageResource(R.drawable.ic_baseline_unfold_less_24)
+                } else {
+                    llMemo.setShapeType(ShapeType.FLAT)
+
+                    memoRv.visibility = if (hasRes) View.GONE else View.INVISIBLE
+                    ivMemo.setImageResource(R.drawable.ic_baseline_unfold_more_24)
+                }
+            }
+
+            llRes.onSafeClick {
+                if (llRes.getShapeType() == ShapeType.FLAT) {
+                    llRes.setShapeType(ShapeType.PRESSED)
+                    resRv.isVisible = true
+                    ivRes.setImageResource(R.drawable.ic_baseline_unfold_less_24)
+                } else {
+                    llRes.setShapeType(ShapeType.FLAT)
+                    resRv.isVisible = false
+                    ivRes.setImageResource(R.drawable.ic_baseline_unfold_more_24)
+                }
             }
         }
     }
@@ -126,7 +174,7 @@ class CurrentFragment : BaseFragment(R.layout.fragment_current) {
                         binding.rvCurrent.isVisible = false
                         binding.noneInfo.isVisible = true
                         binding.noneInfo2.isVisible = true
-                    }else {
+                    } else {
                         showErrDialog(
                             title = "與系統連線發生問題",
                             msg = it.exception,
@@ -148,7 +196,6 @@ class CurrentFragment : BaseFragment(R.layout.fragment_current) {
         }
     }
 
-
     @SuppressLint("SetTextI18n")
     private fun updateInfoDetail(info: AccessLatest) {
         binding.apply {
@@ -164,37 +211,39 @@ class CurrentFragment : BaseFragment(R.layout.fragment_current) {
             tvBirthday.text = getFromServerTime(info.birth)
 
             if (info.notes.isNotEmpty()) {
-                setChips(
-                    requireContext(),
-                    info.notes.map { it.note },
-                    binding.memoChip,
-                    binding.tvName.textSize
-                )
-                binding.hashTag.isVisible = true
-                binding.llMemoChip.isVisible = true
+                val notes = info.notes.map { it.note }
+                CoroutineScope(Dispatchers.Main).launch {
+                    memoAdapter.updateDataset(notes as MutableList<String>)
+                }
+                binding.tvMemoSize.text = "${notes.size}"
+
+                binding.llMemo.isVisible = true
+                binding.llMemo.setShapeType(ShapeType.PRESSED)
+                binding.memoRv.visibility = View.VISIBLE
             } else {
-                binding.hashTag.isVisible = false
-                binding.llMemoChip.isVisible = false
+                binding.llMemo.isVisible = false
+                binding.memoRv.visibility = View.GONE
             }
 
+
             if (info.resData.isNotEmpty()) {
-                llResInfo.visibility = View.VISIBLE
-                resTime.text = getResServerTime(info.resData[0].resTime)
-                resNum.text = info.resData[0].custNum.toString() + "人"
-                if (info.resData[0].memo.isNotBlank()) {
-                    resMemo.text = info.resData[0].memo
-                    resMemo.visibility = View.VISIBLE
-                } else {
-                    resMemo.visibility = View.GONE
+                hasRes = true
+                CoroutineScope(Dispatchers.Main).launch {
+                    resAdapter.updateDataset(info.resData as MutableList<Reservation>)
                 }
+                binding.tvResSize.text = "${info.resData.size}"
+
+                binding.llRes.isVisible = true
+                binding.llRes.setShapeType(ShapeType.PRESSED)
+                binding.resRv.isVisible = true
             } else {
-                llResInfo.visibility = View.GONE
+                binding.llRes.isVisible = false
+                binding.resRv.isVisible = false
             }
 
             llDetailInfo.isVisible = true
         }
     }
-
 
     override fun onDestroyView() {
         scope.cancel()
