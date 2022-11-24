@@ -10,14 +10,27 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewbinding.ViewBinding
+import com.citrus.remote.vo.AccessLatest
 import com.citrus.util.Constants
 import com.citrus.util.i18n.LocaleHelper
+import com.citrus.util.phycicalScanner.ScanKeyManager
+import com.citrus.util.phycicalScanner.SoftKeyBoardListener
 
 
-abstract class BaseActivity<VB : ViewBinding>(private val inflate: InflateActivity<VB>) : AppCompatActivity() {
+abstract class BaseActivity<VB : ViewBinding>(private val inflate: InflateActivity<VB>) :
+    AppCompatActivity() {
 
     private var _binding: VB? = null
     val binding get() = _binding!!
+
+
+    /**掃描槍回調支援*/
+    private var isInput = false
+    private lateinit var scanKeyManager: ScanKeyManager
+    private var onScanListener: ((String) -> Unit)? = null
+    fun setOnScanListener(listener: (String) -> Unit) {
+        onScanListener = listener
+    }
 
     override fun attachBaseContext(newBase: Context?) {
         super.attachBaseContext(LocaleHelper.onAttach(newBase))
@@ -45,6 +58,15 @@ abstract class BaseActivity<VB : ViewBinding>(private val inflate: InflateActivi
 
         initView()
         initObserve()
+        onKeyBoardListener()
+
+        scanKeyManager = ScanKeyManager(object : ScanKeyManager.OnScanValueListener {
+            override fun onScanValue(value: String?) {
+                value?.let {
+                    onScanListener?.invoke(it)
+                }
+            }
+        })
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
@@ -91,4 +113,25 @@ abstract class BaseActivity<VB : ViewBinding>(private val inflate: InflateActivi
         return decorView
     }
 
+
+    override fun dispatchKeyEvent(event: KeyEvent): Boolean {
+        if (event.keyCode != KeyEvent.KEYCODE_BACK && !isInput) {
+            scanKeyManager.analysisKeyEvent(event)
+            return true
+        }
+        return super.dispatchKeyEvent(event)
+    }
+
+    private fun onKeyBoardListener() {
+        SoftKeyBoardListener(this).setListener(object :
+            SoftKeyBoardListener.OnSoftKeyBoardChangeListener {
+            override fun keyBoardShow(height: Int) {
+                isInput = true
+            }
+
+            override fun keyBoardHide(height: Int) {
+                isInput = false
+            }
+        })
+    }
 }

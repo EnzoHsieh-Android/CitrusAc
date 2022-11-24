@@ -2,7 +2,6 @@ package com.citrus.citrusac.present.main
 
 
 import android.util.TypedValue
-import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import androidx.activity.viewModels
@@ -16,10 +15,6 @@ import com.citrus.citrusac.present.setting.SettingFragment
 import com.citrus.di.prefs
 import com.citrus.util.base.BaseActivity
 import com.citrus.util.onSafeClick
-import com.citrus.util.phycicalScanner.ScanKeyManager
-import com.citrus.util.phycicalScanner.ScanKeyManager.OnScanValueListener
-import com.citrus.util.phycicalScanner.SoftKeyBoardListener
-import com.citrus.util.phycicalScanner.SoftKeyBoardListener.OnSoftKeyBoardChangeListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -33,21 +28,13 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     private val sharedViewModel: SharedViewModel by viewModels()
     var scope = CoroutineScope(Job() + Dispatchers.Main)
 
-    private var isInput = false
-    private lateinit var scanKeyManager: ScanKeyManager
-
 
     override fun initView() {
-        scanKeyManager = ScanKeyManager(object : OnScanValueListener {
-            override fun onScanValue(value: String?) {
-                value?.let {
-                    binding.tvCustNo.setText(it)
-                    binding.llCheck.performClick()
-                }
-            }
-        })
+        setOnScanListener { scanValue ->
+            binding.tvCustNo.setText(scanValue)
+            binding.llCheck.performClick()
+        }
 
-        onKeyBoardListener()
         pageTypeChange(PageType.Current)
 
         binding.apply {
@@ -159,23 +146,4 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         }
     }
 
-    override fun dispatchKeyEvent(event: KeyEvent): Boolean {
-        if (event.keyCode != KeyEvent.KEYCODE_BACK && !isInput) {
-            scanKeyManager.analysisKeyEvent(event)
-            return true
-        }
-        return super.dispatchKeyEvent(event)
-    }
-
-
-    private fun onKeyBoardListener() {
-        SoftKeyBoardListener(this).setListener(object : OnSoftKeyBoardChangeListener {
-            override fun keyBoardShow(height: Int) {
-                isInput = true
-            }
-            override fun keyBoardHide(height: Int) {
-                isInput = false
-            }
-        })
-    }
 }
