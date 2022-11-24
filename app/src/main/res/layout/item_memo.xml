@@ -1,25 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginBottom="@dimen/dp_10"
-    >
+    android:background="@drawable/bg_white">
+
+    <TextView
+        android:id="@+id/tvSeq"
+        android:layout_width="@dimen/dp_25"
+        android:layout_height="@dimen/dp_25"
+        android:layout_gravity="center"
+        android:background="@drawable/button_gold_45"
+        android:elevation="@dimen/dp_10"
+        android:gravity="center"
+        android:text="3"
+        android:textColor="@color/colorWhite"
+        android:textSize="@dimen/dp_16"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 
     <TextView
         android:id="@+id/tvMemo"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Hello World"
-        android:textSize="@dimen/dp_22"
-        android:minLines="2"
-        android:maxLines="2"
+        android:layout_marginStart="@dimen/dp_5"
+        android:layout_marginEnd="@dimen/dp_5"
+        android:fontFamily="@font/lato"
         android:gravity="start|center"
-        android:padding="@dimen/dp_10"
-        android:background="@drawable/bg_white"
+        android:maxLines="2"
+        android:minLines="2"
+        android:padding="@dimen/dp_6"
+        android:text="Hello World"
         android:textColor="@color/white"
+        android:textSize="@dimen/dp_20"
+        app:layout_constraintEnd_toStartOf="@+id/viewLine"
+        app:layout_constraintStart_toEndOf="@+id/tvSeq"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/viewLine"
+        android:layout_width="@dimen/dp_5"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/tvMemo"
+        app:layout_constraintEnd_toEndOf="@+id/guideline2"
+        app:layout_constraintStart_toStartOf="@+id/guideline2"
+        app:layout_constraintTop_toTopOf="@+id/tvMemo"
+        android:background="@color/colorGoldDeep"
         />
+
+    <View
+        android:id="@+id/viewLine2"
+        android:layout_width="@dimen/dp_3_5"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/tvMemo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tvMemo"
+        android:background="@color/colorGoldDeep"
+        />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.97" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -220,13 +220,6 @@
                         android:orientation="horizontal"
                         android:padding="@dimen/dp_10">
 
-                        <ImageView
-                            android:id="@+id/ivMemo"
-                            android:layout_width="@dimen/dp_24"
-                            android:layout_height="match_parent"
-                            android:src="@drawable/ic_baseline_unfold_less_24"
-                            app:tint="@color/colorGoldDeep" />
-
                         <TextView
                             android:layout_gravity="center"
                             android:id="@+id/tvMemo"
@@ -236,7 +229,6 @@
                             android:textStyle="bold"
                             android:textSize="@dimen/dp_20"
                             android:textColor="@color/white"
-                            android:layout_marginStart="@dimen/dp_2"
                             app:layout_constraintTop_toBottomOf="@id/avatar"
                             app:layout_constraintStart_toStartOf="@id/avatar"
 
@@ -258,6 +250,13 @@
                             tools:text="3"
                             tools:visibility="visible" />
 
+                        <ImageView
+                            android:id="@+id/ivMemo"
+                            android:layout_width="@dimen/dp_24"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/ic_baseline_unfold_less_24"
+                            app:tint="@color/colorGoldDeep"
+                            android:layout_marginStart="@dimen/dp_2"/>
 
 
                     </LinearLayout>
@@ -276,6 +275,9 @@
                     tools:listitem="@layout/item_memo"
                     android:elevation="@dimen/dp_50"
                     android:layout_marginBottom="@dimen/dp_10"
+                    android:fadingEdgeLength="@dimen/dp_50"
+                    android:fadingEdge="vertical"
+                    android:requiresFadingEdge="vertical"
                     />
 
                 <soup.neumorphism.NeumorphCardView
@@ -304,13 +306,6 @@
                         android:orientation="horizontal"
                         android:padding="@dimen/dp_10">
 
-                        <ImageView
-                            android:id="@+id/ivRes"
-                            android:layout_width="@dimen/dp_24"
-                            android:layout_height="match_parent"
-                            android:src="@drawable/ic_baseline_unfold_less_24"
-                            app:tint="@color/colorGoldDeep" />
-
                         <TextView
                             android:layout_gravity="center"
                             android:id="@+id/tvRes"
@@ -320,7 +315,6 @@
                             android:textStyle="bold"
                             android:textSize="@dimen/dp_20"
                             android:textColor="@color/white"
-                            android:layout_marginStart="@dimen/dp_2"
                             app:layout_constraintTop_toBottomOf="@id/avatar"
                             app:layout_constraintStart_toStartOf="@id/avatar"
                             />
@@ -340,6 +334,14 @@
                             android:textStyle="bold"
                             tools:text="3"
                             tools:visibility="visible" />
+
+                        <ImageView
+                            android:id="@+id/ivRes"
+                            android:layout_width="@dimen/dp_24"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/ic_baseline_unfold_less_24"
+                            app:tint="@color/colorGoldDeep"
+                            android:layout_marginStart="@dimen/dp_2"/>
 
                     </LinearLayout>
 

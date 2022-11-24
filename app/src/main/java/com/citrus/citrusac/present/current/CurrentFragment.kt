@@ -22,7 +22,6 @@ import com.citrus.remote.vo.AccessLatest
 import com.citrus.remote.vo.Reservation
 import com.citrus.util.Constants
 import com.citrus.util.Constants.getFromServerTime
-import com.citrus.util.Constants.getResServerTime
 import com.citrus.util.base.BaseFragment
 import com.citrus.util.ext.lifecycleFlow
 import com.citrus.util.ext.showErrDialog

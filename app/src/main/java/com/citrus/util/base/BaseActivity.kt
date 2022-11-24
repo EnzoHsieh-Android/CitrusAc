@@ -70,6 +70,7 @@ abstract class BaseActivity<VB : ViewBinding>(private val inflate: InflateActivi
         return super.dispatchTouchEvent(ev)
     }
 
+
     fun setFullScreen() {
         val decorView = setSystemUiVisibilityMode()
         decorView.setOnSystemUiVisibilityChangeListener {

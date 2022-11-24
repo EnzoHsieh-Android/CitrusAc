@@ -40,8 +40,9 @@
         </activity>
         <activity
             android:name=".present.main.MainActivity"
-            android:exported="true">
-        </activity>
+            android:configChanges="keyboardHidden"
+            android:exported="true"
+            android:windowSoftInputMode="adjustPan|stateHidden"></activity>
     </application>
 
 </manifest>
