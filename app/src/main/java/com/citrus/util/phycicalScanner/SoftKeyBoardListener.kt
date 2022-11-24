@@ -23,25 +23,21 @@ class SoftKeyBoardListener(val activity: Activity) {
                 return@OnGlobalLayoutListener
             }
 
-            //根视图显示高度没有变化，可以看作软键盘显示／隐藏状态没有改变
+            //根視圖顯示高度沒有變化，可以看作軟鍵盤顯示／隱藏狀態沒有改變
             if (rootViewVisibleHeight == visibleHeight) {
                 return@OnGlobalLayoutListener
             }
 
-            //根视图显示高度变小超过300，可以看作软键盘显示了，该数值可根据需要自行调整
+            //根視圖顯示高度變小超過300，可以看作軟鍵盤顯示了，該數值可根據需要自行調整
             if (rootViewVisibleHeight - visibleHeight > 200) {
-                if (onSoftKeyBoardChangeListener != null) {
-                    onSoftKeyBoardChangeListener!!.keyBoardShow(rootViewVisibleHeight - visibleHeight)
-                }
+                onSoftKeyBoardChangeListener?.keyBoardShow(rootViewVisibleHeight - visibleHeight)
                 rootViewVisibleHeight = visibleHeight
                 return@OnGlobalLayoutListener
             }
 
-            //根视图显示高度变大超过300，可以看作软键盘隐藏了，该数值可根据需要自行调整
+            //根視圖顯示高度變大超過300，可以看作軟鍵盤隱藏了，該數值可根據需要自行調整
             if (visibleHeight - rootViewVisibleHeight > 200) {
-                if (onSoftKeyBoardChangeListener != null) {
-                    onSoftKeyBoardChangeListener!!.keyBoardHide(visibleHeight - rootViewVisibleHeight)
-                }
+                onSoftKeyBoardChangeListener?.keyBoardHide(visibleHeight - rootViewVisibleHeight)
                 rootViewVisibleHeight = visibleHeight
                 return@OnGlobalLayoutListener
             }
