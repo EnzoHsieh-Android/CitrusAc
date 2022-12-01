@@ -113,6 +113,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     private fun pageTypeChange(pageType: PageType) {
         when (pageType) {
             is PageType.Current -> {
+                binding.llHandFill.visibility = View.VISIBLE
                 binding.llCurrent.visibility = View.VISIBLE
                 binding.llHistory.visibility = View.INVISIBLE
                 binding.tvCurrent.setTextSize(
@@ -128,6 +129,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                 binding.tvHistory.setTextColor(resources.getColor(R.color.colorGoldDeep))
             }
             is PageType.History -> {
+                binding.llHandFill.visibility = View.INVISIBLE
                 binding.llCurrent.visibility = View.INVISIBLE
                 binding.llHistory.visibility = View.VISIBLE
 

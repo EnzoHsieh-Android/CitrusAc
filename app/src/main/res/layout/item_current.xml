@@ -66,6 +66,22 @@
 
     </soup.neumorphism.NeumorphCardView>
 
+
+
+    <TextView
+        android:id="@+id/tvBirthday"
+        app:layout_constraintBottom_toTopOf="@+id/userName"
+        app:layout_constraintStart_toStartOf="@+id/userName"
+        app:layout_constraintEnd_toEndOf="@+id/userName"
+        android:drawableStart="@drawable/ic_baseline_cake_14"
+        android:drawablePadding="@dimen/dp_3"
+        android:drawableTint="@color/white"
+        android:textSize="@dimen/dp_14"
+        android:textColor="@color/white"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+
     <TextView
         android:id="@+id/userName"
         android:layout_width="0dp"

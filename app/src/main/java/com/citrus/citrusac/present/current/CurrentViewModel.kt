@@ -32,8 +32,6 @@ class CurrentViewModel @Inject constructor(private val remoteRepository: RemoteR
 
 
 
-
-
     private fun createFetchJob(): Flow<Job> = flow {
         while (currentCoroutineContext().isActive) {
             delay(2000)

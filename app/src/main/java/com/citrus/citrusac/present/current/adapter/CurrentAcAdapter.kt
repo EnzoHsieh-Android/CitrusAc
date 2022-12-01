@@ -1,6 +1,7 @@
 package com.citrus.citrusac.present.current.adapter
 
 import android.content.res.ColorStateList
+import android.util.Log
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
@@ -8,6 +9,7 @@ import com.citrus.citrusac.R
 import com.citrus.citrusac.databinding.ItemCurrentBinding
 import com.citrus.citrusac.present.main.PageType
 import com.citrus.remote.vo.AccessLatest
+import com.citrus.util.Constants
 import com.citrus.util.Constants.getLogServerTime
 import com.citrus.util.base.BindingAdapter
 import com.citrus.util.onSafeClick
@@ -34,6 +36,8 @@ class CurrentAcAdapter :
 
 
             enterDate.text = getLogServerTime(item.logTime)
+
+            tvBirthday.text = Constants.getFromServerTime(item.birth)
 
             root.onSafeClick {
                 data.forEach {

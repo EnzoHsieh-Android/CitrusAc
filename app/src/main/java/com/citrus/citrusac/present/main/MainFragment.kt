@@ -23,6 +23,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
         binding.apply {
             viewPager.offscreenPageLimit = 2
             viewPager.adapter = collectionAdapter
+            viewPager.isUserInputEnabled = false
         }
     }
 

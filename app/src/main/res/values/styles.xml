@@ -84,4 +84,11 @@
         <item name="cornerSizeBottomLeft">@dimen/dp_30</item>
     </style>
 
+
+    <style name="SplashScreenStyle" parent="@style/Theme.AppCompat.NoActionBar">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowTranslucentNavigation">false</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+    </style>
+
 </resources>

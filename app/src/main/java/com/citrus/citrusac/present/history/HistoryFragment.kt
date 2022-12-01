@@ -60,6 +60,8 @@ class HistoryFragment : BaseFragment(R.layout.fragment_history) {
     override fun onResume() {
         super.onResume()
         sharedViewModel.setViewPagerSwitch(PageType.History)
+        viewModel.startQuery()
+
     }
 
     @SuppressLint("SetTextI18n")

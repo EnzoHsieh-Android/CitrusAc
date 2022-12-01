@@ -1,5 +1,6 @@
 package com.citrus.citrusac.present.history
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.citrus.remote.RemoteRepository
@@ -50,6 +51,7 @@ class HistoryViewModel @Inject constructor(private val remoteRepository: RemoteR
         .distinctUntilChanged()
         .onStart { emit(UiAction.SearchStr("")) }
 
+    var filterJob: Flow<String>? = null
 
     init {
         accept = { action ->
@@ -57,7 +59,7 @@ class HistoryViewModel @Inject constructor(private val remoteRepository: RemoteR
         }
 
         viewModelScope.launch {
-            combineTransform(dateSearch, querySearch) { dates, query ->
+            filterJob = combineTransform(dateSearch, querySearch) { dates, query ->
                 if (dates.dates[0] == "" && dates.dates[1] == "" && query.queryStr == "") {
                     _acHistoryEmpty.fineEmit(true)
                     return@combineTransform
@@ -66,7 +68,9 @@ class HistoryViewModel @Inject constructor(private val remoteRepository: RemoteR
                 }
 
                 emit("")
-            }.collect()
+            }
+
+            filterJob?.collect()
         }
 
     }
@@ -79,6 +83,7 @@ class HistoryViewModel @Inject constructor(private val remoteRepository: RemoteR
                 logTimeEnd = endDate,
                 queryStr = query
             )
+            Log.e("accessHistoryRequest", MoshiUtil.toJson(accessHistoryRequest))
             remoteRepository.getAcHistory(
                 getServerIP() + Constants.GET_RECORD_HISTORY,
                 MoshiUtil.toJson(accessHistoryRequest)
@@ -99,8 +104,14 @@ class HistoryViewModel @Inject constructor(private val remoteRepository: RemoteR
         }
     }
 
-    fun setDataEmpty(bol:Boolean) = viewModelScope.launch {
+    fun setDataEmpty(bol: Boolean) = viewModelScope.launch {
         _acHistoryEmpty.fineEmit(bol)
+    }
+
+    fun startQuery() = viewModelScope.launch {
+        if (filterJob != null) {
+            filterJob?.collect()
+        }
     }
 
 

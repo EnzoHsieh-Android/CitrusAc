@@ -30,7 +30,10 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="sensorLandscape"
             android:name=".present.splash.SplashActivity"
+            android:theme="@style/SplashScreenStyle"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -39,8 +42,9 @@
             </intent-filter>
         </activity>
         <activity
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="sensorLandscape"
             android:name=".present.main.MainActivity"
-            android:configChanges="keyboardHidden"
             android:exported="true"
             android:windowSoftInputMode="adjustPan|stateHidden"></activity>
     </application>
