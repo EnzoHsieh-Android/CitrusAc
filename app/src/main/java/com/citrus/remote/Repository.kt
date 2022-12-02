@@ -5,6 +5,7 @@ import com.citrus.remote.vo.*
 import kotlinx.coroutines.flow.Flow
 
 interface Repository {
+    suspend fun getStoreInfo(url: String) : Flow<Resource<StoreInfo>>
     suspend fun getAcSerial(url: String): Flow<Resource<CustomSerial>>
     suspend fun getAcHistory(url: String, jsonData: String): Flow<Resource<List<AccessHistory>>>
     suspend fun setAcData(url: String, jsonData: String): Flow<Resource<String>>

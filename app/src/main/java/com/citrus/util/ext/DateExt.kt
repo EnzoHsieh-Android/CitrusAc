@@ -3,6 +3,8 @@ package com.citrus.util.ext
 import com.citrus.util.DateTimeUtil.HHmmFormatter
 import com.citrus.util.DateTimeUtil.dateFormatter
 import com.citrus.util.DateTimeUtil.dateFormatter2
+import com.citrus.util.DateTimeUtil.dateFormatter3
+import com.citrus.util.DateTimeUtil.dateFormatter4
 import com.citrus.util.DateTimeUtil.dateTimeFormatter
 import com.citrus.util.DateTimeUtil.dateTimeZoneFormFormatter
 import com.citrus.util.DateTimeUtil.dateYearFormatter
@@ -49,6 +51,14 @@ fun LocalDateTime.toDateStr(): String {
 
 fun LocalDateTime.toDateStr2(): String {
     return dateFormatter2.format(this)
+}
+
+fun LocalDateTime.toDateStr3(): String {
+    return dateFormatter3.format(this)
+}
+
+fun LocalDateTime.toDateStr4(): String {
+    return dateFormatter4.format(this)
 }
 
 

@@ -22,6 +22,7 @@ object Constants {
 
     const val SHARED_PREFERENCES_NAME = "sharedPref"
 
+    const val GET_STORE_DATA = "/CitrusAC/Service.asmx/GetStoreData"
     const val GET_SERIAL = "/CitrusAC/Service.asmx/GetCustSerial"
     const val GET_MEMBER_DETAIL = "/CitrusAC/Service.asmx/GetMemberDetail"
     const val GET_RECORD_HISTORY = "/CitrusAC/Service.asmx/GetRecordHistoryList"

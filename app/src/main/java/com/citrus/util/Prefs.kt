@@ -34,5 +34,8 @@ class Prefs @Inject constructor(application: Application) {
         get() = prefs.getString("deviceId", "") ?: ""
         set(value) = prefs.edit().putString("deviceId", value).apply()
 
+    var storeName : String
+        get() = prefs.getString("storeName", "") ?: ""
+        set(value) = prefs.edit().putString("storeName", value).apply()
 
 }

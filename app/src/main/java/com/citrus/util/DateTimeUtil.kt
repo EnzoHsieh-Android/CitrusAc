@@ -19,6 +19,8 @@ object DateTimeUtil {
     val dateYearFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
     val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("MM/dd")
     val dateFormatter2: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd")
+    val dateFormatter3: DateTimeFormatter = DateTimeFormatter.ofPattern("MM/dd HH:mm:ss")
+    val dateFormatter4: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")
     val HHmmFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm")
     val timeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss")
     val defaultZoneId = ZoneId.systemDefault().rules.getOffset(LocalDateTime.now()).id //like: +08:00

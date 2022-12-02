@@ -44,7 +44,7 @@ class HistoryViewModel @Inject constructor(private val remoteRepository: RemoteR
     private val dateSearch = actionSharedFlow
         .filterIsInstance<UiAction.SearchDate>()
         .distinctUntilChanged()
-        .onStart { emit(UiAction.SearchDate(listOf(getCurrentDate(), getCurrentDate()))) }
+        .onStart { emit(UiAction.SearchDate(listOf(getCurrentDate() + " 00:00:00", getCurrentDate() + " 23:59:59"))) }
 
     private val querySearch = actionSharedFlow
         .filterIsInstance<UiAction.SearchStr>()

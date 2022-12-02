@@ -47,6 +47,21 @@ class SharedViewModel @Inject constructor(private val remoteRepository: RemoteRe
         get() = _downloadStatus
 
 
+    init {
+        viewModelScope.launch {
+            remoteRepository.getStoreInfo(url = getServerIP() + Constants.GET_STORE_DATA)
+                .collectLatest {
+                    when (it) {
+                        is Resource.Success -> {
+                            prefs.storeName = it.data.storeName
+                        }
+                        else -> Unit
+                    }
+                }
+        }
+    }
+
+
     fun setAcData(custNo: String, status: String = "I", memo: String = "") = viewModelScope.launch {
         remoteRepository.setAcData(
             url = getServerIP() + Constants.SET_ACCESS_DATA,

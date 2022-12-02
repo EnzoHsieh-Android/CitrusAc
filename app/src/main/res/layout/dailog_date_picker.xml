@@ -26,7 +26,7 @@
             android:id="@+id/groupTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:constraint_referenced_ids="tvStartTime,tvEndTime,cbRememberTime" />
+            app:constraint_referenced_ids="tvStartTime,tvEndTime" />
 
         <ImageView
             android:id="@+id/btnClose"
@@ -141,17 +141,6 @@
             tools:text="02:00" />
 
 
-        <CheckBox
-            android:id="@+id/cbRememberTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:paddingEnd="@dimen/dp_20"
-            android:text="記住日期"
-            android:textSize="@dimen/dp_14"
-            android:textColor="@color/colorSecondText"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvEndTime" />
 
 
 

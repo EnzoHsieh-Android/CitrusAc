@@ -47,6 +47,7 @@ class SettingFragment :
             initProgressDialog()
             etServerIp.setText(prefs.serverIp)
             etDeviceId.setText(prefs.deviceId)
+            storeName.text = prefs.storeName
 
             tvVersion.text =
                 "v${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})${if (BuildConfig.DEBUG) " - DEBUG" else ""}"

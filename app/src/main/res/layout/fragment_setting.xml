@@ -29,6 +29,18 @@
         app:layout_constraintTop_toTopOf="@+id/icon" />
 
     <TextView
+        android:id="@+id/storeName"
+        app:layout_constraintStart_toEndOf="@+id/settingTitle"
+        app:layout_constraintEnd_toStartOf="@+id/tvVersion"
+        app:layout_constraintTop_toTopOf="@+id/settingTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:textSize="@dimen/dp_22"
+        android:textStyle="bold"
+        />
+
+    <TextView
         android:id="@+id/tvVersion"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

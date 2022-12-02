@@ -9,6 +9,11 @@ import retrofit2.http.*
 interface ApiService {
 
     @GET
+    suspend fun getStoreData(
+        @Url url: String
+    ): ApiResponse<ApiResult<StoreInfo>>
+
+    @GET
     suspend fun getAcSerial(
         @Url url: String
     ): ApiResponse<ApiResult<CustomSerial>>
@@ -35,5 +40,7 @@ interface ApiService {
         @Url url: String,
         @Query("jsonData") jsonStr: String
     ): ApiResponse<ApiResult<String>>
+
+
 
 }

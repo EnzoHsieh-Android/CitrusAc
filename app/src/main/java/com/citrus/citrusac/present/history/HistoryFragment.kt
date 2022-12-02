@@ -67,25 +67,39 @@ class HistoryFragment : BaseFragment(R.layout.fragment_history) {
     @SuppressLint("SetTextI18n")
     override fun initView() {
         binding.apply {
-            tvDate.text = LocalDateTime.now().toDateStr() + " ~ " + LocalDateTime.now().toDateStr()
+            tvStartTime.text = LocalDateTime.now().toDateStr() + "\n" + " 00:00"
+            tvEndTime.text = LocalDateTime.now().toDateStr() + "\n" + " 23:59"
 
             rvHistory.apply {
                 layoutManager = LinearLayoutManager(requireContext())
                 adapter = historyAcAdapter
             }
 
-            tvDate.onClick {
-                CustomDatePickerDialog(listOf(LocalDateTime.now())) { selectedDates ->
-                    tvDate.text =
-                        selectedDates.first().toDateStr() + " ~ " + selectedDates.last().toDateStr()
+            tvStartTime.onClick {
+                CustomDatePickerDialog(
+                    listOf(LocalDateTime.now()),
+                    datePickType = DatePickType.DateAndTime,
+                    maxSelectedSize = 3,
+                ) { selectedDates ->
+                    tvStartTime.text = selectedDates.first().toDateStr3()
+                        .split(" ")[0] + "\n" + selectedDates.first().toDateStr3().split(" ")[1]
+
+                    tvEndTime.text = selectedDates.last().toDateStr3()
+                        .split(" ")[0] + "\n" + selectedDates.last().toDateStr3().split(" ")[1]
+
+
                     val dates =
                         listOf(
-                            selectedDates.first().toDateStr2(),
-                            selectedDates.last().toDateStr2()
+                            selectedDates.first().toDateStr4(),
+                            selectedDates.last().toDateStr4()
                         )
+
                     viewModel.accept(UiAction.SearchDate(dates = dates))
                 }.show(childFragmentManager, "CustomDatePickerDialog")
+            }
 
+            tvEndTime.onSafeClick {
+                tvStartTime.performClick()
             }
 
             tvQuery.doOnTextChanged { text, _, _, _ ->
@@ -93,8 +107,8 @@ class HistoryFragment : BaseFragment(R.layout.fragment_history) {
             }
 
             llDateClear.onClick {
-                tvDate.text = ""
-                tvDate.hint = "不限時段"
+                tvStartTime.text = "-"
+                tvEndTime.text = "-"
 
                 val dates = listOf("", "")
 
