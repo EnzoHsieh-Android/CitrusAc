@@ -16,6 +16,7 @@ import com.citrus.citrusac.present.current.adapter.ResAdapter
 import com.citrus.citrusac.present.history.adapter.HistoryAcAdapter
 import com.citrus.citrusac.present.main.PageType
 import com.citrus.citrusac.present.main.SharedViewModel
+import com.citrus.di.prefs
 import com.citrus.remote.Resource
 import com.citrus.remote.vo.AccessHistory
 import com.citrus.remote.vo.AccessLatest
@@ -64,8 +65,10 @@ class HistoryFragment : BaseFragment(R.layout.fragment_history) {
     override fun onResume() {
         super.onResume()
         sharedViewModel.setViewPagerSwitch(PageType.History)
-        viewModel.startQuery()
-        binding.rvHistory.scrollToPosition(0)
+        if(prefs.localIp.isNotBlank()) {
+            viewModel.startQuery()
+            binding.rvHistory.scrollToPosition(0)
+        }
     }
 
     override fun onPause() {
@@ -214,8 +217,8 @@ class HistoryFragment : BaseFragment(R.layout.fragment_history) {
 
                         customDialog?.dismiss()
                         customDialog = showDialog(
-                            "與系統連線發生問題",
-                            it.exception,
+                            "歷史紀錄撈取失敗",
+                            "與系統連線發生問題，請確認網路連線或系統設定是否正確",
                             onConfirmListener = null,
                             onCancelListener = null
                         )

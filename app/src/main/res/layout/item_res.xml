@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:layout_marginTop="@dimen/dp_5"
     android:background="@drawable/bg_white"
-    android:padding="@dimen/dp_20">
+    android:padding="@dimen/dp_10">
 
 
     <TextView

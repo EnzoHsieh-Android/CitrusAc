@@ -141,7 +141,8 @@ class CurrentFragment : BaseFragment(R.layout.fragment_current) {
             Log.e("CurrentFragment", "acSerialError: $it")
 
             customDialog?.dismiss()
-            customDialog = showDialog("與系統連線發生問題", it, onConfirmListener = {
+            customDialog = showDialog("門禁監控系統異常",
+                "與系統連線發生問題，請確認網路連線或系統設定是否正確" , onConfirmListener = {
                 viewModel.startFetchJob()
             }, onCancelListener = null)
 
@@ -195,7 +196,8 @@ class CurrentFragment : BaseFragment(R.layout.fragment_current) {
                         binding.noneInfo2.isVisible = true
                     } else {
                         customDialog?.dismiss()
-                        customDialog = showDialog("與系統連線發生問題", it.exception, onConfirmListener = {
+                        customDialog = showDialog("當前訪客紀錄撈取失敗",
+                            "與系統連線發生問題，請確認網路連線或系統設定是否正確", onConfirmListener = {
                             viewModel.getRecordLatest()
                         }, onCancelListener = null)
                         customDialog?.show()

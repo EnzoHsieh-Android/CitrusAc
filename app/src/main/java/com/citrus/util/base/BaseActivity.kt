@@ -115,7 +115,7 @@ abstract class BaseActivity<VB : ViewBinding>(private val inflate: InflateActivi
 
 
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {
-        if (event.keyCode != KeyEvent.KEYCODE_BACK && !isInput) {
+        if (event.keyCode != KeyEvent.KEYCODE_BACK && !isInput && event.keyCode != KeyEvent.KEYCODE_VOLUME_UP && event.keyCode != KeyEvent.KEYCODE_VOLUME_DOWN && event.keyCode != KeyEvent.KEYCODE_VOLUME_MUTE) {
             scanKeyManager.analysisKeyEvent(event)
             return true
         }
