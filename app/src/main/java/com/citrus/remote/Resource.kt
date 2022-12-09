@@ -2,13 +2,11 @@ package com.citrus.remote
 
 import com.citrus.remote.vo.ApiResult
 import com.citrus.util.Constants
-import com.skydoves.sandwich.ApiResponse
-import com.skydoves.sandwich.suspendOnError
-import com.skydoves.sandwich.suspendOnException
-import com.skydoves.sandwich.suspendOnSuccess
+import com.skydoves.sandwich.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
+import java.io.IOException
 import java.lang.Exception
 
 sealed class Resource<out T>(
@@ -65,6 +63,8 @@ fun <T> resultFlowData(
         throw RetryCondition(errorMsg = this.statusCode.name)
     }.suspendOnException {
         throw RetryCondition(errorMsg = this.exception.message!!)
+    }.suspendOnFailure {
+        throw RetryCondition(errorMsg = this.message())
     }
 }.retryWhen { cause, attempt ->
     val delayTime = when (attempt) {

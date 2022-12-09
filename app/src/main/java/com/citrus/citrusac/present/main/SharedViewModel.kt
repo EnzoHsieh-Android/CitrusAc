@@ -5,10 +5,11 @@ import androidx.lifecycle.viewModelScope
 import com.citrus.di.prefs
 import com.citrus.remote.RemoteRepository
 import com.citrus.remote.Resource
-import com.citrus.remote.vo.AccessData
+import com.citrus.remote.vo.*
 import com.citrus.util.Constants
 import com.citrus.util.Constants.ERROR
 import com.citrus.util.Constants.SUCCESS
+import com.citrus.util.Constants.getLocalIP
 import com.citrus.util.Constants.getServerIP
 import com.citrus.util.MoshiUtil
 import com.citrus.util.apkDownload.DownloadStatus
@@ -40,6 +41,15 @@ class SharedViewModel @Inject constructor(private val remoteRepository: RemoteRe
     private val _setPageType = MutableSharedFlow<PageType>()
     val setPageType: SharedFlow<PageType> = _setPageType
 
+    private val _stopFetchTemp = MutableSharedFlow<Boolean>()
+    val stopFetchTemp: SharedFlow<Boolean> = _stopFetchTemp
+
+    private val _memberNotes = MutableSharedFlow<Resource<List<NoteData>>>()
+    val memberNotes: SharedFlow<Resource<List<NoteData>>> = _memberNotes
+
+    private val _memberRes = MutableSharedFlow<Resource<List<Reservation>>>()
+    val memberRes: SharedFlow<Resource<List<Reservation>>> = _memberRes
+
     /**更版用*/
     private var updateJob: Job? = null
     private val _downloadStatus = MutableSharedFlow<DownloadStatus>()
@@ -49,7 +59,7 @@ class SharedViewModel @Inject constructor(private val remoteRepository: RemoteRe
 
     init {
         viewModelScope.launch {
-            remoteRepository.getStoreInfo(url = getServerIP() + Constants.GET_STORE_DATA)
+            remoteRepository.getStoreInfo(url = getLocalIP() + Constants.GET_STORE_DATA)
                 .collectLatest {
                     when (it) {
                         is Resource.Success -> {
@@ -64,7 +74,7 @@ class SharedViewModel @Inject constructor(private val remoteRepository: RemoteRe
 
     fun setAcData(custNo: String, status: String = "I", memo: String = "") = viewModelScope.launch {
         remoteRepository.setAcData(
-            url = getServerIP() + Constants.SET_ACCESS_DATA,
+            url = getLocalIP() + Constants.SET_ACCESS_DATA,
             jsonData = MoshiUtil.toJson(
                 AccessData(
                     custNo = custNo,
@@ -109,5 +119,49 @@ class SharedViewModel @Inject constructor(private val remoteRepository: RemoteRe
         }
     }
 
+    fun settingOperator(b: Boolean) = viewModelScope.launch {
+        _stopFetchTemp.emit(b)
+    }
+
+    fun setMemoValid(noteData: NoteData) = viewModelScope.launch {
+        remoteRepository.setMemoValid(
+            url = getServerIP() + Constants.SET_MEMO_DONE_TO_SERVER,
+            jsonData = MoshiUtil.toJson(
+                RequestMemoValid(
+                    custNo = noteData.custNo,
+                    seq = listOf(noteData.seq)
+                )
+            )
+        ).collect()
+    }
+
+
+    fun fetchMemoAndRes(custNo: String) {
+        viewModelScope.launch {
+            val requestSpecMember = RequestSpecMemberMemo(custNo)
+            remoteRepository.getMemberMemo(
+                getServerIP() + Constants.GET_MEMO_FROM_SERVER,
+                MoshiUtil.toJson(requestSpecMember)
+            ).collectLatest {
+                if (it is Resource.Success) {
+                    it.data.map { noteData ->
+                        noteData.custNo = custNo
+                    }
+                }
+
+                _memberNotes.emit(it)
+            }
+        }
+
+        viewModelScope.launch {
+            val requestSpecMember = RequestSpecMemberRes(custNo, Constants.getCurrentResDate())
+            remoteRepository.getMemberRes(
+                getServerIP() + Constants.GET_RES_FROM_SERVER,
+                MoshiUtil.toJson(requestSpecMember)
+            ).collectLatest {
+                _memberRes.emit(it)
+            }
+        }
+    }
 
 }

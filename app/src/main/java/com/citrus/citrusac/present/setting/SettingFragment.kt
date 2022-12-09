@@ -22,7 +22,8 @@ import com.citrus.di.prefs
 import com.citrus.util.Constants
 import com.citrus.util.apkDownload.DownloadStatus
 import com.citrus.util.base.BaseDialogFragment
-import com.citrus.util.ext.showErrDialog
+import com.citrus.util.base.CustomAlertDialog
+import com.citrus.util.ext.showDialog
 import com.citrus.util.onSafeClick
 import com.daimajia.androidanimations.library.Techniques
 import com.daimajia.androidanimations.library.YoYo
@@ -31,7 +32,7 @@ import kotlinx.coroutines.flow.collectLatest
 import java.io.File
 
 @AndroidEntryPoint
-class SettingFragment :
+class SettingFragment(val reFetch: () -> Unit) :
     BaseDialogFragment<FragmentSettingBinding>(FragmentSettingBinding::inflate, true) {
 
     private val sharedViewModel: SharedViewModel by activityViewModels()
@@ -39,12 +40,15 @@ class SettingFragment :
     private val requestStorageCode = 888
     var downloadTempVer = ""
 
+    var customDialog: CustomAlertDialog? = null
+
     @SuppressLint("SetTextI18n")
     override fun initView() {
         isCancelable = false
 
         binding.apply {
             initProgressDialog()
+            etLocalIp.setText(prefs.localIp)
             etServerIp.setText(prefs.serverIp)
             etDeviceId.setText(prefs.deviceId)
             storeName.text = prefs.storeName
@@ -60,6 +64,13 @@ class SettingFragment :
                     prefs.serverIp = etServerIp.text.trim().toString().replace(" ", "")
                 }
 
+                if (etLocalIp.text.isBlank()) {
+                    YoYo.with(Techniques.Shake).duration(500).playOn(etLocalIp)
+                    return@onSafeClick
+                } else {
+                    prefs.localIp = etLocalIp.text.trim().toString().replace(" ", "")
+                }
+
                 if (etDeviceId.text.isBlank()) {
                     YoYo.with(Techniques.Shake).duration(500).playOn(etDeviceId)
                     return@onSafeClick
@@ -67,6 +78,8 @@ class SettingFragment :
                     prefs.deviceId = etDeviceId.text.trim().toString().replace(" ", "")
                 }
 
+
+                reFetch()
                 dismiss()
             }
 
@@ -115,13 +128,14 @@ class SettingFragment :
                     }
                     is DownloadStatus.Error -> {
                         mProgressDialog.dismiss()
-                        showErrDialog(
-                            title = "與系統連線發生問題",
-                            msg = "下載失敗",
-                            onConfirmListener = {
-                                downloadApk(downloadTempVer)
-                            }
+                        customDialog?.dismiss()
+                        customDialog = showDialog(
+                            "與系統連線發生問題",
+                            "下載失敗",
+                            onConfirmListener = { downloadApk(downloadTempVer) },
+                            onCancelListener = null
                         )
+                        customDialog?.show()
                     }
                     is DownloadStatus.Progress -> {
                         mProgressDialog.isIndeterminate = false

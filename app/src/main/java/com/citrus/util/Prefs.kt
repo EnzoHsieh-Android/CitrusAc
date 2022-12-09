@@ -30,6 +30,10 @@ class Prefs @Inject constructor(application: Application) {
         get() = prefs.getString("serverIp", "") ?: ""
         set(value) = prefs.edit().putString("serverIp", value).apply()
 
+    var localIp : String
+        get() = prefs.getString("localIp", "") ?: ""
+        set(value) = prefs.edit().putString("localIp", value).apply()
+
     var deviceId : String
         get() = prefs.getString("deviceId", "") ?: ""
         set(value) = prefs.edit().putString("deviceId", value).apply()

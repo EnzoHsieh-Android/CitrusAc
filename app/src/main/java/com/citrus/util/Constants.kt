@@ -28,11 +28,20 @@ object Constants {
     const val GET_RECORD_HISTORY = "/CitrusAC/Service.asmx/GetRecordHistoryList"
     const val GET_RECORD_LATEST = "/CitrusAC/Service.asmx/GetRecordLatestList"
     const val SET_ACCESS_DATA = "/AC/Service.asmx/SetCustAccessData"
+
+    const val GET_MEMO_FROM_SERVER = "/POSServer/CitrusACWS/Service.asmx/GetCustMemo"
+    const val GET_RES_FROM_SERVER = "/POSServer/CitrusACWS/Service.asmx/GetReservation"
+    const val SET_MEMO_DONE_TO_SERVER = "/POSServer/CitrusACWS/Service.asmx/SetCustMemoByIsValid"
+
     const val DOWNLOAD_URL = "http://hq.citrus.tw/apk/"
     val serverDateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
 
     fun getServerIP(): String {
-        return prefs.serverIp
+        return "https://" + prefs.serverIp
+    }
+
+    fun getLocalIP(): String {
+        return "http://" + prefs.localIp
     }
 
     val dateTimeFormatSql = SimpleDateFormat("yyyy/MM/dd HH:mm:ss")
@@ -41,12 +50,21 @@ object Constants {
 
     val dateFormatSql = SimpleDateFormat("yyyy/MM/dd")
 
+    val dateFormatSqlRes = SimpleDateFormat("yyyy-MM-dd")
+
     val timeFormatSql = SimpleDateFormat("HH:mm:ss")
 
     @SuppressLint("SimpleDateFormat")
     fun getCurrentTime(): String {
         val currentDate = Calendar.getInstance().time
         val sdf = dateTimeFormatSql
+        return sdf.format(currentDate)
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    fun getCurrentResDate(): String {
+        val currentDate = Calendar.getInstance().time
+        val sdf = dateFormatSqlRes
         return sdf.format(currentDate)
     }
 

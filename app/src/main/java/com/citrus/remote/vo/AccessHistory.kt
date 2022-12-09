@@ -25,8 +25,6 @@ data class AccessHistory(
     val photoPath: String,
     @Json(name = "LogTime")
     val logTime: String,
-    @Json(name = "IsNote")
-    val isNote: String,
     @Json(name = "Status")
     val status: String,
     @Json(ignore = true)

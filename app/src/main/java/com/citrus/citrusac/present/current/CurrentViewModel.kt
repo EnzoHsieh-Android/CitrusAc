@@ -4,9 +4,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.citrus.remote.RemoteRepository
 import com.citrus.remote.Resource
-import com.citrus.remote.vo.AccessLatest
+import com.citrus.remote.vo.*
 import com.citrus.util.Constants
+import com.citrus.util.Constants.getCurrentDate
+import com.citrus.util.Constants.getCurrentResDate
+import com.citrus.util.Constants.getLocalIP
 import com.citrus.util.Constants.getServerIP
+import com.citrus.util.MoshiUtil
 import com.citrus.util.ext.fineEmit
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
@@ -31,7 +35,6 @@ class CurrentViewModel @Inject constructor(private val remoteRepository: RemoteR
 
 
 
-
     private fun createFetchJob(): Flow<Job> = flow {
         while (currentCoroutineContext().isActive) {
             delay(2000)
@@ -52,7 +55,7 @@ class CurrentViewModel @Inject constructor(private val remoteRepository: RemoteR
 
     /**需要stateFlow的特性來達成後續接收的SerialNum沒有變化時就不觸發View collect的特性，所以在此處理Resources判斷*/
     private fun getAcSerial() = viewModelScope.launch {
-        remoteRepository.getAcSerial(getServerIP() + Constants.GET_SERIAL).collectLatest {
+        remoteRepository.getAcSerial(getLocalIP() + Constants.GET_SERIAL).collectLatest {
             when (it) {
                 is Resource.Success -> {
                     _acSerial.fineEmit(it.data.custserial)
@@ -66,8 +69,10 @@ class CurrentViewModel @Inject constructor(private val remoteRepository: RemoteR
     }
 
     fun getRecordLatest() = viewModelScope.launch {
-        remoteRepository.getAcLatest(getServerIP() + Constants.GET_RECORD_LATEST).collectLatest {
+        remoteRepository.getAcLatest(getLocalIP() + Constants.GET_RECORD_LATEST).collectLatest {
             _acLatest.emit(it)
         }
     }
+
+
 }

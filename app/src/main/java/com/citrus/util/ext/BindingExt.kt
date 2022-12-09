@@ -38,19 +38,16 @@ inline fun <T : ViewBinding> DialogFragment.viewBinding(crossinline factory: (La
     }
 
 
-fun Fragment.showErrDialog(
+fun Fragment.showDialog(
     title: String,
     msg: String,
-    onConfirmListener: () -> Unit,
+    onConfirmListener: (() -> Unit)? = null,
     onCancelListener: (() -> Unit)? = null
-) {
-    activity?.let {
-        val customDialog = CustomAlertDialog(
-            it, title, msg,
-            R.drawable.ic_warning,
-            onConfirmListener = { onConfirmListener() },
-            onCancelListener = { onCancelListener?.invoke() }
-        )
-        customDialog.show()
-    }
+): CustomAlertDialog {
+    return CustomAlertDialog(
+        requireActivity(), title, msg,
+        R.drawable.ic_warning,
+        onConfirmListener = { onConfirmListener?.invoke() },
+        onCancelListener = { onCancelListener?.invoke() }
+    )
 }

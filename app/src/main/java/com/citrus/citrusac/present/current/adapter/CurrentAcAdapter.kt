@@ -2,6 +2,7 @@ package com.citrus.citrusac.present.current.adapter
 
 import android.content.res.ColorStateList
 import android.util.Log
+import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
@@ -26,7 +27,7 @@ class CurrentAcAdapter :
         binding.apply {
             userName.text = item.name
             userPid.text = item.custNo
-            ivNote.isVisible = item.notes.isNotEmpty()
+            ivNote.isVisible = false
             llInfo.setShapeType(if (item.selected) ShapeType.PRESSED else ShapeType.FLAT)
 
             Glide.with(root)

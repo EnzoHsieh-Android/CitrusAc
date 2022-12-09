@@ -227,7 +227,7 @@
                             android:layout_height="wrap_content"
                             android:text="備註"
                             android:textStyle="bold"
-                            android:textSize="@dimen/dp_20"
+                            android:textSize="@dimen/dp_16"
                             android:textColor="@color/white"
                             app:layout_constraintTop_toBottomOf="@id/avatar"
                             app:layout_constraintStart_toStartOf="@id/avatar"

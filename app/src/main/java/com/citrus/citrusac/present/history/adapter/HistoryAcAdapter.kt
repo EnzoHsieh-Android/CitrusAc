@@ -1,9 +1,6 @@
 package com.citrus.citrusac.present.history.adapter
 
 import android.annotation.SuppressLint
-import android.content.res.ColorStateList
-import androidx.core.content.ContextCompat
-import com.citrus.citrusac.R
 import com.citrus.citrusac.databinding.ItemHistoryBinding
 import com.citrus.citrusac.present.main.PageType
 import com.citrus.remote.vo.AccessHistory
@@ -23,16 +20,13 @@ class HistoryAcAdapter :
     override fun convert(binding: ItemHistoryBinding, item: AccessHistory, position: Int) {
         binding.apply {
 
-            ivStatus.imageTintList = ColorStateList.valueOf(
-                ContextCompat.getColor(
-                    root.context,
-                    if (item.status == "I") R.color.green else R.color.red
-                )
-            )
 
             tvCustNo.text = item.custNo
+            tvPid.text = item.pid
             tvName.text = item.name
-            tvLogTime.text = getLogServerDateTime(item.logTime)
+
+            val time = getLogServerDateTime(item.logTime).split(" ")
+            tvLogTime.text = time[0] + "\n" + time[1]
 
 
             if (item.selected) {

@@ -42,5 +42,21 @@ interface ApiService {
     ): ApiResponse<ApiResult<String>>
 
 
+    @GET
+    suspend fun getMemberMemo(
+        @Url url: String,
+        @Query("jsonData") jsonStr: String
+    ): ApiResponse<ApiResult<List<NoteData>>>
 
+    @GET
+    suspend fun getMemberRes(
+        @Url url: String,
+        @Query("jsonData") jsonStr: String
+    ): ApiResponse<ApiResult<List<Reservation>>>
+
+    @GET
+    suspend fun setMemoValid(
+        @Url url: String,
+        @Query("jsonData") jsonStr: String
+    ): ApiResponse<ApiResult<Int>>
 }

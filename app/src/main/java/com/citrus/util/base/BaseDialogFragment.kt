@@ -115,7 +115,7 @@ abstract class BaseDialogFragment<VB : ViewBinding>(private val inflate: Inflate
 //        }
 //    }
 
-    fun setWindowWidthPercent(wPct: Double = 0.65, hPct: Double = 0.6) {
+    fun setWindowWidthPercent(wPct: Double = 0.65, hPct: Double = 0.8) {
         dialog?.window?.let {
             val width = if (wPct == 0.0) WindowManager.LayoutParams.WRAP_CONTENT else Constants.screenW * wPct
             val height = if (hPct == 0.0) WindowManager.LayoutParams.WRAP_CONTENT else  Constants.screenH * hPct

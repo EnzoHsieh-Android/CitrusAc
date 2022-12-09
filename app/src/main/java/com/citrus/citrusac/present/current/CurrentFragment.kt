@@ -3,6 +3,8 @@ package com.citrus.citrusac.present.current
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.annotation.SuppressLint
+import android.media.MediaPlayer
+import android.util.Log
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
@@ -17,14 +19,17 @@ import com.citrus.citrusac.present.current.adapter.MemoAdapter
 import com.citrus.citrusac.present.current.adapter.ResAdapter
 import com.citrus.citrusac.present.main.PageType
 import com.citrus.citrusac.present.main.SharedViewModel
+import com.citrus.di.prefs
 import com.citrus.remote.Resource
 import com.citrus.remote.vo.AccessLatest
+import com.citrus.remote.vo.NoteData
 import com.citrus.remote.vo.Reservation
 import com.citrus.util.Constants
 import com.citrus.util.Constants.getFromServerTime
 import com.citrus.util.base.BaseFragment
+import com.citrus.util.base.CustomAlertDialog
 import com.citrus.util.ext.lifecycleFlow
-import com.citrus.util.ext.showErrDialog
+import com.citrus.util.ext.showDialog
 import com.citrus.util.ext.viewBinding
 import com.citrus.util.onSafeClick
 import dagger.hilt.android.AndroidEntryPoint
@@ -40,6 +45,9 @@ class CurrentFragment : BaseFragment(R.layout.fragment_current) {
     var scope = CoroutineScope(Job() + Dispatchers.Main)
 
     var hasRes = false
+
+    var mMediaPlayer: MediaPlayer? = null
+    var customDialog: CustomAlertDialog? = null
 
 
     @Inject
@@ -59,7 +67,9 @@ class CurrentFragment : BaseFragment(R.layout.fragment_current) {
 
     override fun onResume() {
         super.onResume()
-        viewModel.startFetchJob()
+        if (prefs.localIp.isNotBlank()) {
+            viewModel.startFetchJob()
+        }
         sharedViewModel.setViewPagerSwitch(PageType.Current)
     }
 
@@ -86,7 +96,7 @@ class CurrentFragment : BaseFragment(R.layout.fragment_current) {
             }
 
             resRv.apply {
-                layoutManager = GridLayoutManager(requireContext(), 2)
+                layoutManager = LinearLayoutManager(requireContext())
                 adapter = resAdapter
             }
 
@@ -97,7 +107,6 @@ class CurrentFragment : BaseFragment(R.layout.fragment_current) {
                     ivMemo.setImageResource(R.drawable.ic_baseline_unfold_less_24)
                 } else {
                     llMemo.setShapeType(ShapeType.FLAT)
-
                     memoRv.visibility = if (hasRes) View.GONE else View.INVISIBLE
                     ivMemo.setImageResource(R.drawable.ic_baseline_unfold_more_24)
                 }
@@ -121,18 +130,23 @@ class CurrentFragment : BaseFragment(R.layout.fragment_current) {
         lifecycleFlow(viewModel.acSerial) {
             if (it.isNotBlank()) {
                 viewModel.getRecordLatest()
+                playSound()
+                delay(3000)
+                pauseSound()
             }
         }
 
         lifecycleFlow(viewModel.acSerialError) {
             viewModel.stopFetchJob()
-            showErrDialog(
-                title = "與系統連線發生問題",
-                msg = it,
-                onConfirmListener = {
-                    viewModel.startFetchJob()
-                }
-            )
+            Log.e("CurrentFragment", "acSerialError: $it")
+
+            customDialog?.dismiss()
+            customDialog = showDialog("與系統連線發生問題", it, onConfirmListener = {
+                viewModel.startFetchJob()
+            }, onCancelListener = null)
+
+            customDialog?.show()
+            customDialog?.setCancelBtnVisible()
         }
 
         lifecycleFlow(sharedViewModel.setAcDataSuccess) {
@@ -153,6 +167,10 @@ class CurrentFragment : BaseFragment(R.layout.fragment_current) {
             }
         }
 
+        lifecycleFlow(sharedViewModel.stopFetchTemp) {
+            if (it) viewModel.stopFetchJob() else viewModel.startFetchJob()
+        }
+
         lifecycleFlow(viewModel.acLatest) {
             when (it) {
                 is Resource.Loading -> Unit
@@ -166,22 +184,67 @@ class CurrentFragment : BaseFragment(R.layout.fragment_current) {
                     currentAcAdapter.updateDataset(it.data.take(4) as MutableList<AccessLatest>)
 
                     updateInfoDetail(it.data.first())
+
                 }
 
                 is Resource.Error -> {
+                    Log.e("CurrentFragment", "acLatest error: ${it.message}")
                     if (it.exception == Constants.NO_DATA) {
                         binding.rvCurrent.isVisible = false
                         binding.noneInfo.isVisible = true
                         binding.noneInfo2.isVisible = true
                     } else {
-                        showErrDialog(
-                            title = "與系統連線發生問題",
-                            msg = it.exception,
-                            onConfirmListener = {
-                                viewModel.getRecordLatest()
-                            }
-                        )
+                        customDialog?.dismiss()
+                        customDialog = showDialog("與系統連線發生問題", it.exception, onConfirmListener = {
+                            viewModel.getRecordLatest()
+                        }, onCancelListener = null)
+                        customDialog?.show()
                     }
+                }
+            }
+        }
+
+        lifecycleFlow(sharedViewModel.memberRes) { result ->
+            when (result) {
+                is Resource.Loading -> Unit
+                is Resource.Success -> {
+                    if (result.data.isNotEmpty()) {
+                        hasRes = true
+                        CoroutineScope(Dispatchers.Main).launch {
+                            resAdapter.updateDataset(result.data as MutableList<Reservation>)
+                        }
+                        binding.tvResSize.text = "${result.data.size}"
+
+                        binding.llRes.isVisible = true
+                        binding.llRes.setShapeType(ShapeType.PRESSED)
+                        binding.resRv.isVisible = true
+                    }
+                }
+                is Resource.Error -> {
+                    binding.llRes.isVisible = false
+                    binding.resRv.isVisible = false
+                }
+            }
+        }
+
+        lifecycleFlow(sharedViewModel.memberNotes) { result ->
+            when (result) {
+                is Resource.Loading -> Unit
+                is Resource.Success -> {
+                    if (result.data.isNotEmpty()) {
+                        CoroutineScope(Dispatchers.Main).launch {
+                            memoAdapter.updateDataset(result.data as MutableList<NoteData>)
+                        }
+                        binding.tvMemoSize.text = "${result.data.size}"
+
+                        binding.llMemo.isVisible = true
+                        binding.llMemo.setShapeType(ShapeType.PRESSED)
+                        binding.memoRv.visibility = View.VISIBLE
+                    }
+                }
+                is Resource.Error -> {
+                    binding.llMemo.isVisible = false
+                    binding.memoRv.visibility = View.GONE
                 }
             }
         }
@@ -192,6 +255,11 @@ class CurrentFragment : BaseFragment(R.layout.fragment_current) {
         currentAcAdapter.setOnClickListener {
             updateInfoDetail(it)
             currentAcAdapter.notifyDataSetChanged()
+        }
+
+        memoAdapter.setOnMemoDoneListener { noteData ->
+            sharedViewModel.setMemoValid(noteData)
+            Log.e("CurrentFragment", "onMemoDone: $noteData")
         }
     }
 
@@ -209,38 +277,13 @@ class CurrentFragment : BaseFragment(R.layout.fragment_current) {
             tvCustNo.text = info.custNo
             tvBirthday.text = getFromServerTime(info.birth)
 
-            if (info.notes.isNotEmpty()) {
-                val notes = info.notes.map { it.note }
-                CoroutineScope(Dispatchers.Main).launch {
-                    memoAdapter.updateDataset(notes as MutableList<String>)
-                }
-                binding.tvMemoSize.text = "${notes.size}"
-
-                binding.llMemo.isVisible = true
-                binding.llMemo.setShapeType(ShapeType.PRESSED)
-                binding.memoRv.visibility = View.VISIBLE
-            } else {
-                binding.llMemo.isVisible = false
-                binding.memoRv.visibility = View.GONE
-            }
-
-
-            if (info.resData.isNotEmpty()) {
-                hasRes = true
-                CoroutineScope(Dispatchers.Main).launch {
-                    resAdapter.updateDataset(info.resData as MutableList<Reservation>)
-                }
-                binding.tvResSize.text = "${info.resData.size}"
-
-                binding.llRes.isVisible = true
-                binding.llRes.setShapeType(ShapeType.PRESSED)
-                binding.resRv.isVisible = true
-            } else {
-                binding.llRes.isVisible = false
-                binding.resRv.isVisible = false
-            }
-
             llDetailInfo.isVisible = true
+            binding.llMemo.isVisible = false
+            binding.memoRv.visibility = View.GONE
+            binding.llRes.isVisible = false
+            binding.resRv.isVisible = false
+
+            sharedViewModel.fetchMemoAndRes(info.custNo)
         }
     }
 
@@ -252,6 +295,18 @@ class CurrentFragment : BaseFragment(R.layout.fragment_current) {
     override fun onPause() {
         viewModel.stopFetchJob()
         super.onPause()
+    }
+
+    private fun playSound() {
+        if (mMediaPlayer == null) {
+            mMediaPlayer = MediaPlayer.create(requireContext(), R.raw.alert)
+            mMediaPlayer?.isLooping = true
+            mMediaPlayer?.start()
+        } else if (mMediaPlayer?.isPlaying != true) mMediaPlayer?.start()
+    }
+
+    private fun pauseSound() {
+        if (mMediaPlayer != null && mMediaPlayer?.isPlaying == true) mMediaPlayer?.pause()
     }
 
 

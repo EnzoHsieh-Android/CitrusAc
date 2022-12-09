@@ -16,10 +16,6 @@ data class AccessLatest(
     val logTime: String,
     @Json(name = "PhotoPath")
     var photoPath: String,
-    @Json(name = "Notes")
-    val notes: List<NoteData>,
-    @Json(name = "Reservation")
-    val resData: List<Reservation>,
     @Json(ignore = true)
     var selected: Boolean = false,
 )
@@ -30,6 +26,10 @@ data class NoteData(
     val seq: Int,
     @Json(name = "Note")
     var note: String,
+    @Json(ignore = true)
+    var selected: Boolean = false,
+    @Json(ignore = true)
+    var custNo: String = "false",
 )
 
 

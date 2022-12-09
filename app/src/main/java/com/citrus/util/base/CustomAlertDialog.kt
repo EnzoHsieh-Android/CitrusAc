@@ -23,7 +23,7 @@ class CustomAlertDialog(
         {})
 
     override fun initView() {
-        setCanceledOnTouchOutside(false)
+        setCanceledOnTouchOutside(true)
         binding.apply {
             YoYo.with(Techniques.FlipInX).delay(100).duration(1000)
                 .pivot(YoYo.CENTER_PIVOT, YoYo.CENTER_PIVOT).playOn(ivIcon)

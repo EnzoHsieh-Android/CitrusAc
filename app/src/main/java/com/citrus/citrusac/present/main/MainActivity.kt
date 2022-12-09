@@ -38,13 +38,19 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         pageTypeChange(PageType.Current)
 
         binding.apply {
-            if (prefs.serverIp.isBlank() || prefs.deviceId.isBlank()) {
-                SettingFragment().show(supportFragmentManager, "SettingFragment")
+            if (prefs.serverIp.isBlank() || prefs.deviceId.isBlank() || prefs.localIp.isBlank()) {
+                sharedViewModel.settingOperator(true)
+                SettingFragment{
+                    sharedViewModel.settingOperator(false)
+                }.show(supportFragmentManager, "SettingFragment")
             }
 
 
             setting.onSafeClick {
-                SettingFragment().show(supportFragmentManager, "SettingFragment")
+                sharedViewModel.settingOperator(true)
+                SettingFragment{
+                    sharedViewModel.settingOperator(false)
+                }.show(supportFragmentManager, "SettingFragment")
             }
 
             llCheck.onSafeClick {

@@ -15,7 +15,8 @@
         android:gravity="start|center"
         android:text="2022/05/21 17:30"
         android:textColor="@color/white"
-        android:textSize="@dimen/dp_22"
+        android:textStyle="bold"
+        android:textSize="@dimen/dp_18"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -25,7 +26,7 @@
         android:layout_height="wrap_content"
         android:text="2人"
         android:textColor="@color/white"
-        android:textSize="@dimen/dp_22"
+        android:textSize="@dimen/dp_18"
         app:layout_constraintStart_toEndOf="@+id/tvTime"
         app:layout_constraintTop_toTopOf="@+id/tvTime"
         app:layout_constraintBottom_toBottomOf="@+id/tvTime"
@@ -41,7 +42,7 @@
         android:minLines="2"
         android:text="備註：無"
         android:textColor="@color/white"
-        android:textSize="@dimen/dp_20"
+        android:textSize="@dimen/dp_14"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/tvCusNum"
         app:layout_constraintTop_toBottomOf="@+id/tvTime" />

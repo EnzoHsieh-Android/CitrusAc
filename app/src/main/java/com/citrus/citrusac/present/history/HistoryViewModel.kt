@@ -11,6 +11,7 @@ import com.citrus.remote.vo.AccessHistoryRequest
 import com.citrus.remote.vo.AccessLatest
 import com.citrus.util.Constants
 import com.citrus.util.Constants.getCurrentDate
+import com.citrus.util.Constants.getLocalIP
 import com.citrus.util.Constants.getServerIP
 import com.citrus.util.MoshiUtil
 import com.citrus.util.ext.fineEmit
@@ -44,7 +45,16 @@ class HistoryViewModel @Inject constructor(private val remoteRepository: RemoteR
     private val dateSearch = actionSharedFlow
         .filterIsInstance<UiAction.SearchDate>()
         .distinctUntilChanged()
-        .onStart { emit(UiAction.SearchDate(listOf(getCurrentDate() + " 00:00:00", getCurrentDate() + " 23:59:59"))) }
+        .onStart {
+            emit(
+                UiAction.SearchDate(
+                    listOf(
+                        getCurrentDate() + " 00:00:00",
+                        getCurrentDate() + " 23:59:59"
+                    )
+                )
+            )
+        }
 
     private val querySearch = actionSharedFlow
         .filterIsInstance<UiAction.SearchStr>()
@@ -64,6 +74,7 @@ class HistoryViewModel @Inject constructor(private val remoteRepository: RemoteR
                     _acHistoryEmpty.fineEmit(true)
                     return@combineTransform
                 } else {
+                    Log.e("HistoryViewModel", "str: ${query.queryStr}")
                     getAcHistory(dates.dates.first(), dates.dates.last(), query.queryStr)
                 }
 
@@ -85,7 +96,7 @@ class HistoryViewModel @Inject constructor(private val remoteRepository: RemoteR
             )
             Log.e("accessHistoryRequest", MoshiUtil.toJson(accessHistoryRequest))
             remoteRepository.getAcHistory(
-                getServerIP() + Constants.GET_RECORD_HISTORY,
+                getLocalIP() + Constants.GET_RECORD_HISTORY,
                 MoshiUtil.toJson(accessHistoryRequest)
             ).collectLatest {
                 _acHistory.fineEmit(it)
@@ -97,7 +108,7 @@ class HistoryViewModel @Inject constructor(private val remoteRepository: RemoteR
             custNo = no
         )
         remoteRepository.getAcDetail(
-            getServerIP() + Constants.GET_MEMBER_DETAIL,
+            getLocalIP() + Constants.GET_MEMBER_DETAIL,
             MoshiUtil.toJson(acDetailRequest)
         ).collectLatest {
             _acDetail.fineEmit(it)

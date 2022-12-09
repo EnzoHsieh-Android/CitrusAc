@@ -1,12 +1,12 @@
 package com.citrus.citrusac.present.history
 
 import android.annotation.SuppressLint
+import android.util.Log
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.citrus.citrusac.R
@@ -19,9 +19,11 @@ import com.citrus.citrusac.present.main.SharedViewModel
 import com.citrus.remote.Resource
 import com.citrus.remote.vo.AccessHistory
 import com.citrus.remote.vo.AccessLatest
+import com.citrus.remote.vo.NoteData
 import com.citrus.remote.vo.Reservation
 import com.citrus.util.Constants
 import com.citrus.util.base.BaseFragment
+import com.citrus.util.base.CustomAlertDialog
 import com.citrus.util.ext.*
 import com.citrus.util.onSafeClick
 import dagger.hilt.android.AndroidEntryPoint
@@ -49,6 +51,8 @@ class HistoryFragment : BaseFragment(R.layout.fragment_history) {
     @Inject
     lateinit var resAdapter: ResAdapter
 
+    var customDialog: CustomAlertDialog? = null
+
     var hasRes = false
 
     companion object {
@@ -61,14 +65,21 @@ class HistoryFragment : BaseFragment(R.layout.fragment_history) {
         super.onResume()
         sharedViewModel.setViewPagerSwitch(PageType.History)
         viewModel.startQuery()
+        binding.rvHistory.scrollToPosition(0)
+    }
 
+    override fun onPause() {
+        super.onPause()
+        binding.tvQuery.text.clear()
+        binding.tvStartTime.text = LocalDateTime.now().toDateStr() + "\n" + " 00:00:00"
+        binding.tvEndTime.text = LocalDateTime.now().toDateStr() + "\n" + " 23:59:59"
     }
 
     @SuppressLint("SetTextI18n")
     override fun initView() {
         binding.apply {
-            tvStartTime.text = LocalDateTime.now().toDateStr() + "\n" + " 00:00"
-            tvEndTime.text = LocalDateTime.now().toDateStr() + "\n" + " 23:59"
+            tvStartTime.text = LocalDateTime.now().toDateStr() + "\n" + " 00:00:00"
+            tvEndTime.text = LocalDateTime.now().toDateStr() + "\n" + " 23:59:59"
 
             rvHistory.apply {
                 layoutManager = LinearLayoutManager(requireContext())
@@ -126,7 +137,7 @@ class HistoryFragment : BaseFragment(R.layout.fragment_history) {
             }
 
             resRv.apply {
-                layoutManager = GridLayoutManager(requireContext(), 2)
+                layoutManager = LinearLayoutManager(requireContext())
                 adapter = resAdapter
             }
 
@@ -154,6 +165,11 @@ class HistoryFragment : BaseFragment(R.layout.fragment_history) {
                 }
             }
 
+            refresh.setOnRefreshListener {
+                viewModel.startQuery()
+            }
+
+
         }
 
     }
@@ -177,6 +193,7 @@ class HistoryFragment : BaseFragment(R.layout.fragment_history) {
 
 
         lifecycleFlow(viewModel.acHistory) {
+            binding.refresh.isRefreshing = false
             when (it) {
                 is Resource.Success -> {
                     it.data.firstOrNull()?.let { ac ->
@@ -194,13 +211,16 @@ class HistoryFragment : BaseFragment(R.layout.fragment_history) {
                         viewModel.setDataEmpty(true)
                     } else {
                         viewModel.setDataEmpty(true)
-                        showErrDialog(
-                            title = "與系統連線發生問題",
-                            msg = it.exception,
-                            onConfirmListener = {
 
-                            }
+                        customDialog?.dismiss()
+                        customDialog = showDialog(
+                            "與系統連線發生問題",
+                            it.exception,
+                            onConfirmListener = null,
+                            onCancelListener = null
                         )
+                        customDialog?.show()
+                        customDialog?.setCancelBtnVisible()
                     }
                 }
             }
@@ -216,11 +236,61 @@ class HistoryFragment : BaseFragment(R.layout.fragment_history) {
                 is Resource.Error -> Unit
             }
         }
+
+        lifecycleFlow(sharedViewModel.memberRes) { result ->
+            when (result) {
+                is Resource.Loading -> Unit
+                is Resource.Success -> {
+                    if (result.data.isNotEmpty()) {
+                        hasRes = true
+                        CoroutineScope(Dispatchers.Main).launch {
+                            resAdapter.updateDataset(result.data as MutableList<Reservation>)
+                        }
+                        binding.tvResSize.text = "${result.data.size}"
+
+                        binding.llRes.isVisible = true
+                        binding.llRes.setShapeType(ShapeType.PRESSED)
+                        binding.resRv.isVisible = true
+                    }
+                }
+                is Resource.Error -> {
+                    binding.llRes.isVisible = false
+                    binding.resRv.isVisible = false
+                }
+            }
+        }
+
+        lifecycleFlow(sharedViewModel.memberNotes) { result ->
+            when (result) {
+                is Resource.Loading -> Unit
+                is Resource.Success -> {
+                    if (result.data.isNotEmpty()) {
+                        CoroutineScope(Dispatchers.Main).launch {
+                            memoAdapter.updateDataset(result.data as MutableList<NoteData>)
+                        }
+                        binding.tvMemoSize.text = "${result.data.size}"
+
+                        binding.llMemo.isVisible = true
+                        binding.llMemo.setShapeType(ShapeType.PRESSED)
+                        binding.memoRv.visibility = View.VISIBLE
+                    }
+                }
+                is Resource.Error -> {
+                    binding.llMemo.isVisible = false
+                    binding.memoRv.visibility = View.GONE
+                }
+            }
+        }
     }
 
     override fun initAction() {
         historyAcAdapter.setOnClickListener { custNo ->
             viewModel.getAcDetail(custNo)
+        }
+
+        memoAdapter.setOnMemoDoneListener { noteData ->
+            sharedViewModel.setMemoValid(noteData)
+            Log.e("CurrentFragment", "onMemoDone: $noteData")
         }
     }
 
@@ -237,37 +307,14 @@ class HistoryFragment : BaseFragment(R.layout.fragment_history) {
             tvCustNo.text = info.custNo
             tvBirthday.text = Constants.getFromServerTime(info.birth)
 
-            if (info.notes.isNotEmpty()) {
-                val notes = info.notes.map { it.note }
-                CoroutineScope(Dispatchers.Main).launch {
-                    memoAdapter.updateDataset(notes as MutableList<String>)
-                }
-                binding.tvMemoSize.text = "${notes.size}"
-                binding.llMemo.isVisible = true
-                binding.llMemo.setShapeType(ShapeType.PRESSED)
-                binding.memoRv.isVisible = true
-            } else {
-                binding.llMemo.isVisible = false
-                binding.memoRv.isVisible = false
-            }
-
-
-            if (info.resData.isNotEmpty()) {
-                hasRes = true
-                CoroutineScope(Dispatchers.Main).launch {
-                    resAdapter.updateDataset(info.resData as MutableList<Reservation>)
-                }
-
-                binding.tvResSize.text = "${info.resData.size}"
-                binding.llRes.isVisible = true
-                binding.llRes.setShapeType(ShapeType.PRESSED)
-                binding.resRv.isVisible = true
-            } else {
-                binding.llRes.isVisible = false
-                binding.resRv.isVisible = false
-            }
 
             llDetailInfo.isVisible = true
+            binding.llMemo.isVisible = false
+            binding.memoRv.visibility = View.GONE
+            binding.llRes.isVisible = false
+            binding.resRv.isVisible = false
+
+            sharedViewModel.fetchMemoAndRes(info.custNo)
         }
     }
 

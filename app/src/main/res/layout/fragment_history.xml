@@ -471,6 +471,9 @@
                 android:textColor="@color/white"
                 android:textColorHint="@color/colorLightGray2"
                 android:textSize="@dimen/sp_20"
+                android:imeOptions="actionDone"
+                android:singleLine="true"
+                android:inputType="text"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/llPidClear"
                 app:layout_constraintStart_toStartOf="parent"
@@ -545,96 +548,55 @@
         app:neumorph_shapeAppearance="@style/CustomShapeAppearance3"
         app:neumorph_shapeType="flat">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-           >
-
-            <ImageView
-                android:id="@+id/ivStatus"
-                android:layout_width="@dimen/dp_30"
-                android:layout_height="@dimen/dp_30"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:padding="@dimen/dp_5"
-                android:src="@drawable/ic_baseline_circle_24"
-                android:visibility="invisible"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/per15"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/red" />
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/per15"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_begin="58dp" />
-
+            android:orientation="horizontal">
 
             <TextView
-                android:drawableStart="@drawable/id"
-                android:drawablePadding="@dimen/dp_3"
-                android:drawableTint="@color/colorGoldDeep"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
-
+                android:layout_gravity="center"
+                android:gravity="center"
                 android:padding="@dimen/dp_10"
-                android:text="編號"
+                android:text="會員編號"
                 android:textColor="@color/colorGoldDeep"
                 android:textSize="@dimen/dp_20"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/per35"
-                app:layout_constraintStart_toEndOf="@+id/per15"
-                app:layout_constraintTop_toTopOf="parent" />
-
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/per35"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.35" />
+                android:textStyle="bold" />
 
 
             <TextView
-                android:drawableStart="@drawable/id_card"
-                android:drawablePadding="@dimen/dp_5"
-                android:drawableTint="@color/colorGoldDeep"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:padding="@dimen/dp_10"
+                android:text="PID"
+                android:textColor="@color/colorGoldDeep"
+                android:textSize="@dimen/dp_20"
+                android:textStyle="bold" />
+
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
                 android:gravity="center"
                 android:padding="@dimen/dp_10"
                 android:text="姓名"
                 android:textColor="@color/colorGoldDeep"
                 android:textSize="@dimen/dp_20"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/per60"
-                app:layout_constraintStart_toEndOf="@+id/per35"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:textStyle="bold" />
 
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/per60"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.6" />
 
 
             <TextView
-                android:drawableStart="@drawable/ic_outline_access_time_24"
-                android:drawablePadding="@dimen/dp_5"
-                android:drawableTint="@color/colorGoldDeep"
                 android:id="@+id/tvLogTime"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="4"
+                android:layout_weight="2"
                 android:gravity="center"
                 android:padding="@dimen/dp_10"
                 android:text="打卡時間"
@@ -645,23 +607,33 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/per60"
                 app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
     </soup.neumorphism.NeumorphCardView>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvHistory"
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/refresh"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginHorizontal="@dimen/dp_10"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/startVertical"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/llTitle"
-        tools:listitem="@layout/item_history"
-        android:fadingEdge="vertical"
-        android:requiresFadingEdge="vertical"
-        android:fadingEdgeLength="@dimen/dp_80"/>
+        app:layout_constraintTop_toBottomOf="@+id/llTitle">
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvHistory"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="@dimen/dp_10"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_history"
+            android:fadingEdge="vertical"
+            android:requiresFadingEdge="vertical"
+            android:fadingEdgeLength="@dimen/dp_80"/>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+
 
     <ImageView
         android:id="@+id/noneInfo2"
