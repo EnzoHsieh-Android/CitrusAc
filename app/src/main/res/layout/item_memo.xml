@@ -29,7 +29,7 @@
         android:layout_marginEnd="@dimen/dp_5"
         android:fontFamily="@font/lato"
         android:gravity="start|center"
-        android:maxLines="2"
+        android:maxLines="20"
         android:minLines="2"
         android:padding="@dimen/dp_6"
         android:text="Hello World"
